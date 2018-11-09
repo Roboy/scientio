@@ -4,11 +4,13 @@ from src import neo4j_relationship
 
 from enum import Enum
 
+
 # check out better way
 class RelationshipAvailability(Enum):
     ALL_AVAILABLE = 1
     SOME_AVAILABLE = 2
     NONE_AVAILABLE = 3
+
 
 class NodeModel(object):
     def __init__(self):
@@ -20,7 +22,7 @@ class NodeModel(object):
         self.label = None
         # name, birthdate
         self.properties = dict()
-        # Relation: <name as String, ArrayList of IDs (constraints related to this node over this relation)>
+        # Relation: <name, list od IDs>
         self.relationships = dict()
         self.neo4j_legal_labels = set()
         self.neo4j_legal_properties = set()
@@ -160,21 +162,35 @@ class NodeModel(object):
         if not isinstance(other, NodeModel):
             return False
         new_node = NodeModel(other)
-        equality = self.get_id() == new_node.get_id() and self.get_label() == new_node.get_label() and \
-                   object.__eq__(self.get_labels(), new_node.get_labels()) and \
-                   object.__eq__(self.get_properties(), new_node.get_properties()) and \
-                   object.__eq__(self.get_relationships(), new_node.get_relationships())
-
-        # TODO override __eq__ for get_labels, get_properties and get_relationships
+        equality = self.get_id() == new_node.get_id() and self.get_label() == new_node.get_label() #and \
+                   #self.get_labels() == new_node.get_labels() and \
+                   #self.get_properties() == new_node.get_properties() and \
+                   #self.get_relationships() == new_node.get_relationships()
+        # TODO
         return equality
 
     def __hash__(self):
         return object.__hash__((self.get_id(), self.get_label(), self.get_labels(), self.get_properties(),
                                 self.get_relationships()))
 
-    # @ Override : toString()
+    def __str__(self):
+        return "NodeModel{" + "id = " + self.id + ", labels = " + self.labels + ", label = " + self.label +\
+               ", properties = " + self.properties + ", relationships = " + self.relationships + "}"
 
-    # def query_for_matching_node(self, node: NodeModel):
-    #    if self.memory is not None:
-    #        if node.get_label() is not None or node.get_labels() is not None:
-    #            nodes = list()
+    def get_neo4j_legal_labels(self):
+        return self.neo4j_legal_labels
+
+    def set_neo4j_legal_labels(self, neo4j_legal_labels):
+        self.neo4j_legal_labels = neo4j_legal_labels
+
+    def get_neo4j_legal_relationships(self):
+        return self.neo4j_legal_relationships
+
+    def set_neo4j_legal_relationships(self, neo4j_legal_relationships):
+        self.neo4j_legal_relationships = neo4j_legal_relationships
+
+    def get_neo4j_legal_properties(self):
+        return self.neo4j_legal_properties
+
+    def set_neo4j_legal_properties(self, neo4j_legal_properties):
+        self.neo4j_legal_properties = neo4j_legal_properties
