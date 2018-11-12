@@ -13,7 +13,9 @@ class RelationshipAvailability(Enum):
 
 
 class NodeModel(object):
-    def __init__(self):
+    def __init__(self, node):
+        if node:
+            self.set(node)
         # unique nodes ID assigned by memory
         self.id = 0
         # "Person" etc. Duplicate because Memory expects a single Label in CREATE queries, but
@@ -93,10 +95,9 @@ class NodeModel(object):
 
     # def set(self, node: NodeModel):
     def set(self, node):
-        if node:
-            self.set_id(node.get_id())
-            self.set_relationships(node.get_relationships() if node.get_relationships() is not None else dict())
-            self.set_properties(node.get_properties() if node.get_properties() is not None else dict())
+        self.set_id(node.get_id())
+        self.set_relationships(node.get_relationships() if node.get_relationships() is not None else dict())
+        self.set_properties(node.get_properties() if node.get_properties() is not None else dict())
 
     def get_name(self):
         return self.get_properties(neo4j_property.name)
@@ -177,20 +178,5 @@ class NodeModel(object):
         return "NodeModel{" + "id = " + self.id + ", labels = " + self.labels + ", label = " + self.label +\
                ", properties = " + self.properties + ", relationships = " + self.relationships + "}"
 
-    def get_neo4j_legal_labels(self):
-        return self.neo4j_legal_labels
 
-    def set_neo4j_legal_labels(self, neo4j_legal_labels):
-        self.neo4j_legal_labels = neo4j_legal_labels
 
-    def get_neo4j_legal_relationships(self):
-        return self.neo4j_legal_relationships
-
-    def set_neo4j_legal_relationships(self, neo4j_legal_relationships):
-        self.neo4j_legal_relationships = neo4j_legal_relationships
-
-    def get_neo4j_legal_properties(self):
-        return self.neo4j_legal_properties
-
-    def set_neo4j_legal_properties(self, neo4j_legal_properties):
-        self.neo4j_legal_properties = neo4j_legal_properties
