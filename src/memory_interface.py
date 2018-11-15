@@ -1,5 +1,6 @@
 from src import memory_node
 
+
 # I'm a stub
 class MemoryInterface(object):
 
@@ -13,7 +14,7 @@ class MemoryInterface(object):
         return nodes
 
     def create(self, node):
-        return None
+        pass
 
     def get_by_id(self, id_):
         pass
