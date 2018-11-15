@@ -4,7 +4,7 @@ from src import neo4j_relationship
 
 from enum import Enum
 
-
+#TODO
 # check out better way
 class RelationshipAvailability(Enum):
     ALL_AVAILABLE = 1
@@ -42,11 +42,11 @@ class NodeModel(object):
     def get_labels(self):
         return self.labels
 
-    def set_label(self, label):
+    def set_label(self, label: neo4j_label.Neo4jLabel):
         self.label = label
         self.labels.add(label)
 
-    def set_labels(self, label):
+    def set_labels(self, label: neo4j_label.Neo4jLabel):
         self.labels.add(label)
 
     def set_labels(self, labels):
@@ -55,7 +55,7 @@ class NodeModel(object):
     def get_properties(self):
         return None if len(self.properties) == 0 else self.properties
 
-    def get_properties(self, key):
+    def get_properties(self, key: neo4j_property.Neo4jProperty):
         if key:
             return None if len(self.properties) == 0 else self.properties.get(key)
         return None
@@ -65,7 +65,7 @@ class NodeModel(object):
             for key in properties.keys():
                 self.set_properties(key, properties.get(key))
 
-    def set_properties(self, key, property_):
+    def set_properties(self, key: neo4j_property.Neo4jProperty, property_):
         if key:
             new_entry = {key, property_}
             self.properties.update(new_entry)
@@ -73,7 +73,7 @@ class NodeModel(object):
     def get_relationships(self):
         return None if len(self.relationships) == 0 else self.relationships
 
-    def get_relationships(self, key):
+    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship):
         if key:
             return None if len(self.relationships) == 0 else self.relationships.get(key)
 
@@ -82,7 +82,7 @@ class NodeModel(object):
             for key in relationships.keys():
                 self.set_relationships(key, relationships.get(key))
 
-    def set_relationships(self, key, ids):
+    def set_relationships(self, key: neo4j_relationship.Neo4jRelationship, ids):
         if key and ids:
             if key in self.relationships:
                 self.relationships.get(key).append(ids)
@@ -157,6 +157,7 @@ class NodeModel(object):
         self.reset_properties()
         self.reset_relationships()
 
+    # TODO: does not work
     def __eq__(self, other):
         if self == other:
             return True
@@ -175,8 +176,11 @@ class NodeModel(object):
                                 self.get_relationships()))
 
     def __str__(self):
-        return "NodeModel{" + "id = " + self.id + ", labels = " + self.labels + ", label = " + self.label +\
-               ", properties = " + self.properties + ", relationships = " + self.relationships + "}"
+        return "NodeModel{" + "id = " + self.id + \
+               ", labels = " + self.labels + \
+               ", label = " + self.label + \
+               ", properties = " + self.properties + \
+               ", relationships = " + self.relationships + "}"
 
 
 
