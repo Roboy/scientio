@@ -43,14 +43,14 @@ class MemoryNodeModel(node.NodeModel):
         self.neo4j_legal_properties = neo4j_legal_properties
 
     def is_familiar(self):
-        if not self.initialized:
+        if self.initialized is None:
             self.familiar = self.init()
         return self.familiar
 
     def init(self, node):
         result = self.query_for_matching_nodes(node)
         self.initialized = True
-        if result:
+        if result is not None:
             self.set(result)
             return True
         else:
@@ -62,7 +62,7 @@ class MemoryNodeModel(node.NodeModel):
         return False
 
     def query_for_matching_nodes(self, node):
-        if self.memory:
+        if self.memory is not None:
             if node.get_label() or node.get_labels():
                 nodes = self.memory.get_by_query()
                 if nodes and len(nodes) != 0:
@@ -70,12 +70,12 @@ class MemoryNodeModel(node.NodeModel):
         return None
 
     def create(self, node):
-        if self.memory:
+        if self.memory is not None:
             id_ = self.memory.create(node)
             return self.memory.get_by_id(id_)
 
     def add_information(self, relationship, name):
-        if self.memory:
+        if self.memory is not None:
             # First check if node with given name exists by a matching query.
             related_node = MemoryNodeModel(True, self.memory)
             related_node.set_properties(neo4j_property.Neo4jProperty.name, name)

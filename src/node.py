@@ -4,7 +4,8 @@ from src import neo4j_relationship
 
 from enum import Enum
 
-#TODO
+
+# TODO
 # check out better way
 class RelationshipAvailability(Enum):
     ALL_AVAILABLE = 1
@@ -42,53 +43,47 @@ class NodeModel(object):
     def get_labels(self):
         return self.labels
 
-    def set_label(self, label: neo4j_label.Neo4jLabel):
-        self.label = label
-        self.labels.add(label)
+    def set_label(self, label):
+        if isinstance(label, neo4j_label.Neo4jLabel):
+            self.label = label
+            self.labels.add(label)
+        if isinstance(label, set):
+            self.labels.update(label)
+        else:
+            raise TypeError("Wrong Type")
 
-    def set_labels(self, label: neo4j_label.Neo4jLabel):
-        self.labels.add(label)
-
-    def set_labels(self, labels):
+    def set_labels(self, labels: set):
         self.labels.update(labels)
 
-    def get_properties(self):
+    def get_properties(self, key: neo4j_property.Neo4jProperty):
+        if key is not None:
+            return None if len(self.properties) == 0 else self.properties.get(key)
         return None if len(self.properties) == 0 else self.properties
 
-    def get_properties(self, key: neo4j_property.Neo4jProperty):
-        if key:
-            return None if len(self.properties) == 0 else self.properties.get(key)
-        return None
-
-    def set_properties(self, properties):
-        if properties:
+    def set_properties(self, properties, key: neo4j_property.Neo4jProperty, property_):
+        if key is not None:
+            new_entry = {key, property_}
+            self.properties.update(new_entry)
+        elif properties is not None:
             for key in properties.keys():
                 self.set_properties(key, properties.get(key))
 
-    def set_properties(self, key: neo4j_property.Neo4jProperty, property_):
-        if key:
-            new_entry = {key, property_}
-            self.properties.update(new_entry)
-
-    def get_relationships(self):
+    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship):
+        if key is not None:
+            return None if len(self.relationships) == 0 else self.relationships.get(key)
         return None if len(self.relationships) == 0 else self.relationships
 
-    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship):
-        if key:
-            return None if len(self.relationships) == 0 else self.relationships.get(key)
-
-    def set_relationships(self, relationships):
-        if relationships:
-            for key in relationships.keys():
-                self.set_relationships(key, relationships.get(key))
-
-    def set_relationships(self, key: neo4j_relationship.Neo4jRelationship, ids):
-        if key and ids:
+    def set_relationships(self, key: neo4j_relationship.Neo4jRelationship, ids, relationships):
+        if key is not None and ids is not None:
             if key in self.relationships:
                 self.relationships.get(key).append(ids)
             else:
                 new_entry = {key, ids}
                 self.relationships.update(new_entry)
+
+        if relationships is not None:
+            for key in relationships.keys():
+                self.set_relationships(key, relationships.get(key))
 
     def has_relationships(self, relationship):
         return not (self.get_relationships(relationship) is None) and not self.get_relationships(relationship)
@@ -103,7 +98,7 @@ class NodeModel(object):
         return self.get_properties(neo4j_property.name)
 
     def add_name(self, name):
-        if name:
+        if name is not None:
             self.set_properties(neo4j_property.name, name)
 
     def check_relationship_availability(self, relationships):
