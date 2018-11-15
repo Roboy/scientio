@@ -11,12 +11,13 @@ class RelationshipAvailability(Enum):
 
 
 class NodeModel(object):
-    def __init__(self, node):
+    def __init__(self, node=None):
         if node is not None:
             self.set(node)
         # unique nodes ID assigned by memory
         self.id = 0
-        # "Person" etc. Duplicate because Memory expects a single Label in CREATE queries, but
+        # "Person" etc. Duplicate because Memory expects
+        # a single Label in CREATE queries, but
         # returns an array of labels inside GET responses.
         self.labels = set()
         self.label = None
@@ -54,7 +55,7 @@ class NodeModel(object):
         for label in labels:
             self.labels.add(label)
 
-    def get_properties(self, key: neo4j_property.Neo4jProperty = None):
+    def get_properties(self, key: neo4j_property.Neo4jProperty=None):
         if len(self.properties) > 0:
             if key is not None:
                 return self.properties.get(key)
@@ -71,14 +72,15 @@ class NodeModel(object):
         else:
             raise TypeError("Wrong Type")
 
-    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship = None):
+    def get_relationships(self,
+                          key: neo4j_relationship.Neo4jRelationship=None):
         if len(self.relationships) > 0:
             if key is not None:
                 return self.relationships.get(key)
             return self.relationships
         return None
 
-    def set_relationships(self, key, ids = None):
+    def set_relationships(self, key, ids=None):
         if isinstance(key, neo4j_relationship.Neo4jRelationship):
             if key in self.relationships:
                 self.relationships.get(key).append(ids)

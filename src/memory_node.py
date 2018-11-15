@@ -6,18 +6,19 @@ from src import neo4j_property
 
 class MemoryNodeModel(node.NodeModel):
 
-    def __init__(self, memory: memory_interface.MemoryInterface, node: node.NodeModel, strip_query):
+    def __init__(self, memory: memory_interface.MemoryInterface=None,
+                 memory_node=None, strip_query=None):
+        super().__init__(self)
         # GSON stuff: @Expose: private transient boolean stripQuery
         self.strip_query = False
-        # supposed to be Neo4jMemoryInterface
-        self.memory = None
         if memory:
             self.memory = memory
-        if node:
-            self.set(node)
+        else:
+            self.memory = None
+        if memory_node:
+            self.set(memory_node)
         self.initialized = False
         self.familiar = False
-        super(MemoryNodeModel, self).__init__()
         if not strip_query:
             self.reset_node()
         else:
@@ -47,38 +48,42 @@ class MemoryNodeModel(node.NodeModel):
             self.familiar = self.init()
         return self.familiar
 
-    def init(self, node):
-        result = self.query_for_matching_nodes(node)
+    def init(self, memory_node=None):
+        result = self.query_for_matching_nodes(memory_node)
         self.initialized = True
         if result is not None:
             self.set(result)
             return True
         else:
-            result = self.create(node)
+            result = self.create(memory_node)
             if result:
                 self.set(result)
             else:
                 self.initialized = False
         return False
 
-    def query_for_matching_nodes(self, node):
-        if self.memory is not None:
-            if node.get_label() or node.get_labels():
+    def query_for_matching_nodes(self, memory_node):
+        if isinstance(memory_node, MemoryNodeModel):
+            if memory_node.get_label() or memory_node.get_labels():
                 nodes = self.memory.get_by_query()
                 if nodes and len(nodes) != 0:
                     return nodes[0]
+        else:
+            raise TypeError("Wrong Type")
         return None
 
-    def create(self, node):
-        if self.memory is not None:
-            id_ = self.memory.create(node)
-            return self.memory.get_by_id(id_)
+    def create(self, memory_node):
+        if isinstance(memory_node, MemoryNodeModel):
+            node_id = self.memory.create(memory_node)
+            return self.memory.get_by_id(node_id)
+        else:
+            raise TypeError("Wrong Type")
 
     def add_information(self, relationship, name):
         if self.memory is not None:
             # First check if node with given name exists by a matching query.
-            related_node = MemoryNodeModel(True, self.memory)
-            related_node.set_properties(neo4j_property.Neo4jProperty.name, name)
+            related_node = MemoryNodeModel(self.memory, MemoryNodeModel(), True)
+            related_node.set_properties(neo4j_property.Neo4jProperty().name, name)
             # This adds a label type to the memory query depending on the relation.
             related_node.set_label(neo4j_relationship.Neo4jRelationship.determine_node_type(relationship))
             nodes = self.memory.get_by_query()
@@ -86,9 +91,9 @@ class MemoryNodeModel(node.NodeModel):
             if nodes and len(nodes) != 0:
                 self.set_relationships(relationship, nodes[0].get_id())
             else:
-                id_ = self.memory.create(related_node)
-                if id_ != 0:
-                    self.set_relationships(relationship, id_)
+                node_id = self.memory.create(related_node)
+                if node_id != 0:
+                    self.set_relationships(relationship, node_id)
             self.memory.save()
             return True
         return False
@@ -98,13 +103,12 @@ class MemoryNodeModel(node.NodeModel):
 
     def is_legal(self):
         # TODO: implement
-        return True
+        pass
 
     def __str__(self):
-        return "NodeModel{" + "memory= " + self.memory + \
+        return "NodeModel{" + "memory= " + str(self.memory) + \
                ", id = " + self.id + \
                ", labels = " + self.labels + \
                ", label = " + self.label + \
                ", properties = " + self.properties + \
                ", relationships = " + self.relationships + "}"
-
