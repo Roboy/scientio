@@ -1,12 +1,9 @@
 from src import neo4j_label
 from src import neo4j_property
 from src import neo4j_relationship
-
 from enum import Enum
 
 
-# TODO
-# check out better way
 class RelationshipAvailability(Enum):
     ALL_AVAILABLE = 1
     SOME_AVAILABLE = 2
@@ -15,7 +12,7 @@ class RelationshipAvailability(Enum):
 
 class NodeModel(object):
     def __init__(self, node):
-        if node:
+        if node is not None:
             self.set(node)
         # unique nodes ID assigned by memory
         self.id = 0
@@ -34,8 +31,8 @@ class NodeModel(object):
     def get_id(self):
         return self.id
 
-    def set_id(self, id_):
-        self.id = id_
+    def set_id(self, node_id):
+        self.id = node_id
 
     def get_label(self):
         return self.label
@@ -48,58 +45,77 @@ class NodeModel(object):
             self.label = label
             self.labels.add(label)
         if isinstance(label, set):
-            self.labels.update(label)
+            for i in label:
+                self.labels.add(i)
         else:
             raise TypeError("Wrong Type")
 
     def set_labels(self, labels: set):
-        self.labels.update(labels)
+        for label in labels:
+            self.labels.add(label)
 
-    def get_properties(self, key: neo4j_property.Neo4jProperty):
-        if key is not None:
-            return None if len(self.properties) == 0 else self.properties.get(key)
-        return None if len(self.properties) == 0 else self.properties
+    def get_properties(self, key: neo4j_property.Neo4jProperty = None):
+        if len(self.properties) > 0:
+            if key is not None:
+                return self.properties.get(key)
+            return self.properties
+        return None
 
-    def set_properties(self, properties, key: neo4j_property.Neo4jProperty, property_):
-        if key is not None:
-            new_entry = {key, property_}
-            self.properties.update(new_entry)
-        elif properties is not None:
-            for key in properties.keys():
-                self.set_properties(key, properties.get(key))
+    def set_properties(self, properties, key):
+        if isinstance(properties, neo4j_property.Neo4jProperty):
+            if key is not None:
+                self.properties[key] = properties
+        elif isinstance(properties, dict):
+            for k in properties.keys():
+                self.set_properties(properties.get(k), k)
+        else:
+            raise TypeError("Wrong Type")
 
-    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship):
-        if key is not None:
-            return None if len(self.relationships) == 0 else self.relationships.get(key)
-        return None if len(self.relationships) == 0 else self.relationships
+    def get_relationships(self, key: neo4j_relationship.Neo4jRelationship = None):
+        if len(self.relationships) > 0:
+            if key is not None:
+                return self.relationships.get(key)
+            return self.relationships
+        return None
 
-    def set_relationships(self, key: neo4j_relationship.Neo4jRelationship, ids, relationships):
-        if key is not None and ids is not None:
+    def set_relationships(self, key, ids = None):
+        if isinstance(key, neo4j_relationship.Neo4jRelationship):
             if key in self.relationships:
                 self.relationships.get(key).append(ids)
             else:
-                new_entry = {key, ids}
-                self.relationships.update(new_entry)
-
-        if relationships is not None:
-            for key in relationships.keys():
-                self.set_relationships(key, relationships.get(key))
+                self.relationships[key] = ids
+        elif isinstance(key, dict):
+            for k in key.keys():
+                self.set_relationships(k, key.get(k))
+        else:
+            raise TypeError("Wrong Type")
 
     def has_relationships(self, relationship):
-        return not (self.get_relationships(relationship) is None) and not self.get_relationships(relationship)
+        if self.get_relationships(relationship) is not None:
+            if len(self.get_relationships(relationship)) != 0:
+                return True
+        return False
 
-    # def set(self, node: NodeModel):
     def set(self, node):
-        self.set_id(node.get_id())
-        self.set_relationships(node.get_relationships() if node.get_relationships() is not None else dict())
-        self.set_properties(node.get_properties() if node.get_properties() is not None else dict())
+        if isinstance(node, NodeModel):
+            self.set_id(node.get_id())
+            if node.get_relationships() is None:
+                self.set_relationships(dict())
+            else:
+                self.set_relationships(node.get_relationships())
+            if node.get_properties() is None:
+                self.set_relationships(dict())
+            else:
+                self.set_relationships(node.get_properties())
+        else:
+            raise TypeError("Wrong Type")
 
     def get_name(self):
-        return self.get_properties(neo4j_property.name)
+        return self.get_properties(neo4j_property.Neo4jProperty().name)
 
     def add_name(self, name):
         if name is not None:
-            self.set_properties(neo4j_property.name, name)
+            self.set_properties(neo4j_property.Neo4jProperty().name, name)
 
     def check_relationship_availability(self, relationships):
         all_available = True
@@ -109,7 +125,6 @@ class NodeModel(object):
                 at_least_one_available = True
             else:
                 all_available = False
-
         if all_available:
             return RelationshipAvailability.ALL_AVAILABLE
         if at_least_one_available:
@@ -119,13 +134,10 @@ class NodeModel(object):
     def get_purity_relationships(self, predicates):
         pure_impure_values = dict()
         new_list = list()
-        new_entry = {False, new_list}
-        pure_impure_values.update(new_entry)
-        new_entry = {True, new_list}
-        pure_impure_values.update(new_entry)
+        pure_impure_values[False] = new_list
+        pure_impure_values[True] = new_list
         for predicate in predicates:
-            #TODO
-            pure_impure_values.get(self.has_relationships(predicate))
+            pure_impure_values.get(self.has_relationships(predicate)).append(predicate)
         return pure_impure_values
 
     # def isLegal()
@@ -152,18 +164,17 @@ class NodeModel(object):
         self.reset_properties()
         self.reset_relationships()
 
-    # TODO: does not work
     def __eq__(self, other):
         if self == other:
             return True
         if not isinstance(other, NodeModel):
             return False
         new_node = NodeModel(other)
-        equality = self.get_id() == new_node.get_id() and self.get_label() == new_node.get_label() #and \
-                   #self.get_labels() == new_node.get_labels() and \
-                   #self.get_properties() == new_node.get_properties() and \
-                   #self.get_relationships() == new_node.get_relationships()
-        # TODO
+        equality = self.get_id() == new_node.get_id() \
+            and self.get_label() == new_node.get_label() \
+            and self.get_labels() == new_node.get_labels() \
+            and self.get_properties() == new_node.get_properties() \
+            and self.get_relationships() == new_node.get_relationships()
         return equality
 
     def __hash__(self):
@@ -171,11 +182,8 @@ class NodeModel(object):
                                 self.get_relationships()))
 
     def __str__(self):
-        return "NodeModel{" + "id = " + self.id + \
-               ", labels = " + self.labels + \
+        return "NodeModel{" + "id = " + str(self.id) + \
+               ", labels = " + str(self.labels) + \
                ", label = " + self.label + \
-               ", properties = " + self.properties + \
-               ", relationships = " + self.relationships + "}"
-
-
-
+               ", properties = " + str(self.properties) + \
+               ", relationships = " + str(self.relationships) + "}"
