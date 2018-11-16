@@ -1,7 +1,7 @@
 from src import memory_node
+from src import memory_interface
 from src import neo4j_label
 from src import neo4j
-from src import memory_interface
 
 
 class CRUD(object):
@@ -15,13 +15,13 @@ class CRUD(object):
 
     # Get node by ID
     @staticmethod
-    def retrieve(id_, memory: memory_interface.MemoryInterface):
-        if id_ > 0:
-            return neo4j.Neo4j().get_node_by_id(id_, memory)
-        elif id_ == 0:
-            pass
-        # TODO what labels? We do not have a node do we?
-        # if id == 0 returns list[memorynodemodel's where each node has the same labels,properties and relationships]
+    def retrieve(request: memory_node.MemoryNodeModel, node_id, memory: memory_interface.MemoryInterface):
+        if node_id > 0:
+            return neo4j.Neo4j().get_node_by_id(node_id, memory)
+        elif node_id == 0:
+            if not request.get_label().__eq__(neo4j_label.Neo4jLabel().other) and \
+                    not request.get_label().__eq__(neo4j_label.Neo4jLabel().none):
+                return neo4j.Neo4j().get_node(request, memory)
         return None
 
     # Update Nodes
@@ -34,8 +34,8 @@ class CRUD(object):
 
     # Delete a Node
     @staticmethod
-    def delete(request: memory_node.MemoryNodeModel):
-        if request.get_id() > 0:
-            # TODO: if id != 0 and retrieve(argument) == null returns true else returns false
-            return neo4j.Neo4j().delete(request)
+    def delete(request: memory_node.MemoryNodeModel, memory: memory_interface.MemoryInterface):
+        if request.get_id() > 0 and CRUD.retrieve(request, request.get_id(), memory) is not None:
+            neo4j.Neo4j().delete(request)
+            return True
         return False
