@@ -4,4 +4,5 @@ class Neo4jRelationship:
         pass
 
     def determine_node_type(self):
-        return None
+        pass
+
