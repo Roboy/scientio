@@ -1,10 +1,10 @@
-from src import node
+from src import node_model
 from src import memory_interface
 from src import neo4j_relationship
 from src import neo4j_property
 
 
-class MemoryNodeModel(node.NodeModel):
+class MemoryNodeModel(node_model.NodeModel):
 
     def __init__(self, memory: memory_interface.MemoryInterface=None,
                  memory_node=None, strip_query=None):

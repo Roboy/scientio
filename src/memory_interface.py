@@ -1,4 +1,4 @@
-from src import memory_node
+from src import memory_node_model
 
 
 # I'm a stub
@@ -9,7 +9,7 @@ class MemoryInterface(object):
 
     def get_by_query(self):
         nodes = list()
-        node = memory_node.MemoryNodeModel()
+        node = memory_node_model.MemoryNodeModel()
         nodes.append(node)
         return nodes
 
