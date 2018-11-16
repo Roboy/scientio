@@ -26,9 +26,9 @@ class NodeModel(object):
         # Relation: <name, list od IDs>
         self.relationships = dict()
 
-        # self.neo4j_legal_labels = set()
-        # self.neo4j_legal_properties = set()
-        # self.neo4j_legal_relationships = set()
+        self.neo4j_legal_labels = set()
+        self.neo4j_legal_properties = set()
+        self.neo4j_legal_relationships = set()
 
     def get_id(self):
         return self.id
