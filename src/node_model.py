@@ -20,11 +20,12 @@ class NodeModel(object):
         # a single Label in CREATE queries, but
         # returns an array of labels inside GET responses.
         self.labels = set()
-        self.label = None
+        self.label = neo4j_label.Neo4jLabel
         # name, birthdate
         self.properties = dict()
         # Relation: <name, list od IDs>
         self.relationships = dict()
+
         self.neo4j_legal_labels = set()
         self.neo4j_legal_properties = set()
         self.neo4j_legal_relationships = set()
