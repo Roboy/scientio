@@ -1,6 +1,6 @@
 from . ontology import Ontology
 from . operations import Operations
-from . memory_node_model import NodeModel
+from . node_model import NodeModel
 import sys
 
 
