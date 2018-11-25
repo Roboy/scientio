@@ -5,7 +5,7 @@ from src.scientio.operations import Operations
 from src.scientio.ontology import Ontology
 from neo4j import GraphDatabase
 
-from src.scientio.node_model import NodeModel
+from scientio.node_model import NodeModel
 from typing import Optional
 
 
