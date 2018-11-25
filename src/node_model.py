@@ -1,6 +1,7 @@
 from src import neo4j_label
 from src import neo4j_property
 from src import neo4j_relationship
+
 from enum import Enum
 
 
@@ -9,18 +10,18 @@ class RelationshipAvailability(Enum):
     SOME_AVAILABLE = 2
     NONE_AVAILABLE = 3
 
+class NodeModel():
+    # TODO: What is Memory???
+    def __init__(self, memory=None,
+                node=None, strip_query=None):
 
-class NodeModel(object):
-    def __init__(self, node=None):
-        if node is not None:
-            self.set(node)
         # unique nodes ID assigned by memory
         self.id = 0
         # "Person" etc. Duplicate because Memory expects
         # a single Label in CREATE queries, but
         # returns an array of labels inside GET responses.
         self.labels = set()
-        self.label = neo4j_label.Neo4jLabel
+        self.label = neo4j_label.Neo4jLabel()
         # name, birthdate
         self.properties = dict()
         # Relation: <name, list od IDs>
@@ -29,6 +30,22 @@ class NodeModel(object):
         self.neo4j_legal_labels = set()
         self.neo4j_legal_properties = set()
         self.neo4j_legal_relationships = set()
+
+        # GSON stuff: @Expose: private transient boolean stripQuery
+        self.strip_query = False
+        if memory is not None:
+            self.memory = memory
+        else:
+            self.memory = None
+        if node is not None:
+            self.set_node(node)
+        self.initialized = False
+        self.familiar = False
+        if strip_query is None:
+            self.reset_node()
+        else:
+            self.set_id(0)
+            self.strip_query = True
 
     def get_id(self):
         return self.id
@@ -99,7 +116,7 @@ class NodeModel(object):
                 return True
         return False
 
-    def set(self, node):
+    def set_node(self, node):
         if isinstance(node, NodeModel):
             self.set_id(node.get_id())
             if node.get_relationships() is None:
@@ -143,8 +160,6 @@ class NodeModel(object):
             pure_impure_values.get(self.has_relationships(predicate)).append(predicate)
         return pure_impure_values
 
-    # def isLegal()
-
     def reset_id(self):
         self.id = 0
 
@@ -167,6 +182,86 @@ class NodeModel(object):
         self.reset_properties()
         self.reset_relationships()
 
+    def get_neo4j_legal_labels(self):
+        return self.neo4j_legal_labels
+
+    def set_neo4j_legal_labels(self, neo4j_legal_labels):
+        self.neo4j_legal_labels = neo4j_legal_labels
+
+    def get_neo4j_legal_relationships(self):
+        return self.neo4j_legal_relationships
+
+    def set_neo4j_legal_relationships(self, neo4j_legal_relationships):
+        self.neo4j_legal_relationships = neo4j_legal_relationships
+
+    def get_neo4j_legal_properties(self):
+        return self.neo4j_legal_properties
+
+    def set_neo4j_legal_properties(self, neo4j_legal_properties):
+        self.neo4j_legal_properties = neo4j_legal_properties
+
+    def is_familiar(self):
+        if self.initialized is None:
+            self.familiar = self.init()
+        return self.familiar
+
+    def init(self, node=None):
+        result = self.query_for_matching_nodes(node)
+        self.initialized = True
+        if result is not None:
+            self.set_node(result)
+            return True
+        else:
+            result = self.create(node)
+            if result:
+                self.set_node(result)
+            else:
+                self.initialized = False
+        return False
+
+    def query_for_matching_nodes(self, node):
+        if isinstance(node, NodeModel):
+            if node.get_label() or node.get_labels():
+                nodes = self.memory.get_by_query()
+                if nodes and len(nodes) != 0:
+                    return nodes[0]
+        else:
+            raise TypeError("Wrong Type")
+        return None
+
+    def create(self, node):
+        if isinstance(node, NodeModel):
+            node_id = self.memory.create(node)
+            return self.memory.get_by_id(node_id)
+        else:
+            raise TypeError("Wrong Type")
+
+    def add_information(self, relationship, name):
+        if self.memory is not None:
+            # First check if node with given name exists by a matching query.
+            related_node = NodeModel(self.memory, NodeModel(), True)
+            related_node.set_properties(neo4j_property.Neo4jProperty().name, name)
+            # This adds a label type to the memory query depending on the relation.
+            related_node.set_label(neo4j_relationship.Neo4jRelationship.determine_node_type(relationship))
+            nodes = self.memory.get_by_query()
+            # Pick first from list if multiple matches found.
+            if nodes and len(nodes) != 0:
+                self.set_relationships(relationship, nodes[0].get_id())
+            else:
+                node_id = self.memory.create(related_node)
+                if node_id != 0:
+                    self.set_relationships(relationship, node_id)
+            self.memory.save()
+            return True
+        return False
+
+    def set_strip_query(self, strip):
+        self.strip_query = strip
+
+    def is_legal(self):
+        # TODO: implement
+        pass
+
     def __eq__(self, other):
         if self == other:
             return True
@@ -185,8 +280,10 @@ class NodeModel(object):
                                 self.get_relationships()))
 
     def __str__(self):
-        return "NodeModel{" + "id = " + str(self.id) + \
-               ", labels = " + str(self.labels) + \
-               ", label = " + self.label + \
-               ", properties = " + str(self.properties) + \
-               ", relationships = " + str(self.relationships) + "}"
+        return "NodeModel{" + "memory= " + str(self.memory) + \
+            ", id = " + str(self.id) + \
+            ", labels = " + str(self.labels) + \
+            ", label = " + str(self.label) + \
+            ", properties = " + str(self.properties) + \
+            ", relationships = " + str(self.relationships) + "}"
+

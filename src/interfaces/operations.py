@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.memory_node_model import MemoryNodeModel
+from src.node_model import NodeModel
 
 
 class Operations(ABC):
@@ -9,7 +9,7 @@ class Operations(ABC):
     """
     @staticmethod
     @abstractmethod
-    def create(request: MemoryNodeModel) -> MemoryNodeModel:
+    def create(request: NodeModel) -> NodeModel:
         """
         Create a node
         :param request:
@@ -19,7 +19,7 @@ class Operations(ABC):
 
     @staticmethod
     @abstractmethod
-    def retrieve(request: MemoryNodeModel, node_id: int = None) -> MemoryNodeModel:
+    def retrieve(request: NodeModel, node_id: int = None) -> NodeModel:
         """
         Get node by ID
         :param request:
@@ -30,7 +30,7 @@ class Operations(ABC):
 
     @staticmethod
     @abstractmethod
-    def update(request: MemoryNodeModel) -> MemoryNodeModel:
+    def update(request: NodeModel) -> NodeModel:
         """
         Update Nodes
         :param request:
@@ -40,7 +40,7 @@ class Operations(ABC):
 
     @staticmethod
     @abstractmethod
-    def delete(request: MemoryNodeModel) -> bool:
+    def delete(request: NodeModel) -> bool:
         """
         Delete a Node
         :param request:

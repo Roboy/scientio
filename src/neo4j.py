@@ -2,7 +2,7 @@ from typing import Optional
 
 from neo4j import GraphDatabase
 
-from src.memory_node_model import MemoryNodeModel
+from src.node_model import NodeModel
 
 
 class Neo4j(object):
@@ -35,35 +35,35 @@ class Neo4j(object):
         result = tx.run(query)
         return result.single()[0]
 
-    def create_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def create_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = "" # builder from MNM
         with self._driver.session() as session:
             result = session.write_transaction(self._create_and_return_query, query=query)
         result_node = None # node from result
         return result_node
 
-    def get_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def get_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         with self._driver.session() as session:
             result = session.write_transaction(self._create_and_return_query, query=query)
         result_node = None  # node from result
         return result_node
 
-    def get_node_by_id(self, node_id: int) -> Optional[MemoryNodeModel]:
+    def get_node_by_id(self, node_id: int) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         with self._driver.session() as session:
             result = session.write_transaction(self._create_and_return_query, query=query)
         result_node = None  # node from result
         return result_node
 
-    def update_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def update_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         with self._driver.session() as session:
             result = session.write_transaction(self._create_and_return_query, query=query)
         result_node = None  # node from result
         return result_node
 
-    def delete_node(self, node: MemoryNodeModel) -> bool:
+    def delete_node(self, node: NodeModel) -> bool:
         query = ""  # builder from MNM
         with self._driver.session() as session:
             result = session.write_transaction(self._create_and_return_query, query=query)
