@@ -1,0 +1,4 @@
+
+
+class Ontology:
+    pass

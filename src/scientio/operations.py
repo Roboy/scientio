@@ -1,15 +1,13 @@
 from abc import ABC, abstractmethod
-
-from src.memory_node_model import MemoryNodeModel
+from src.scientio.memory_node_model import MemoryNodeModel
 
 
 class Operations(ABC):
     """
     Interface for CRUD operations within a graph memory
     """
-    @staticmethod
     @abstractmethod
-    def create(request: MemoryNodeModel) -> MemoryNodeModel:
+    def create(self, request: MemoryNodeModel) -> MemoryNodeModel:
         """
         Create a node
         :param request:
@@ -17,9 +15,8 @@ class Operations(ABC):
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def retrieve(request: MemoryNodeModel, node_id: int = None) -> MemoryNodeModel:
+    def retrieve(self, request: MemoryNodeModel, node_id: int = None) -> MemoryNodeModel:
         """
         Get node by ID
         :param request:
@@ -28,9 +25,8 @@ class Operations(ABC):
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def update(request: MemoryNodeModel) -> MemoryNodeModel:
+    def update(self, request: MemoryNodeModel) -> MemoryNodeModel:
         """
         Update Nodes
         :param request:
@@ -38,9 +34,8 @@ class Operations(ABC):
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def delete(request: MemoryNodeModel) -> bool:
+    def delete(self, request: MemoryNodeModel) -> bool:
         """
         Delete a Node
         :param request:
