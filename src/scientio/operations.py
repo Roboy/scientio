@@ -1,46 +1,41 @@
 from abc import ABC, abstractmethod
-
-from src.node_model import NodeModel
+from scientio.node_model import NodeModel
 
 
 class Operations(ABC):
     """
     Interface for CRUD operations within a graph memory
     """
-    @staticmethod
     @abstractmethod
-    def create(request: NodeModel) -> NodeModel:
+    def create(self, request: NodeModel) -> NodeModel:
         """
         Create a node
         :param request:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def retrieve(request: NodeModel, node_id: int = None) -> NodeModel:
+    def retrieve(self, request: NodeModel, node_id: int = None) -> NodeModel:
         """
         Get node by ID
         :param request:
         :param node_id:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def update(request: NodeModel) -> NodeModel:
+    def update(self, request: NodeModel) -> NodeModel:
         """
         Update Nodes
         :param request:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
-    @staticmethod
     @abstractmethod
-    def delete(request: NodeModel) -> bool:
+    def delete(self, request: NodeModel) -> bool:
         """
         Delete a Node
         :param request:
