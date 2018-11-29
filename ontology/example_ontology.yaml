@@ -1,83 +1,84 @@
-Person:
-  main_label: Person
-  allowed_labels: [Person]
-  allowed_properties: [name, sex, full_name, birthdate, timestamp]
-  allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 -------
-TelegramPerson:
-  main_label: TelegramPerson
-  allowed_labels: [TelegramPerson]
-  allowed_properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
-  allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
+!Person
+type: Person
+meta: [Person]
+properties: [name, sex, full_name, birthdate, timestamp]
+relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 -------
-Robot:
-  main_label: Robot
-  allowed_labels: [Robot]
-  allowed_properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
-  allowed_relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
+!TelegramPerson:
+type: TelegramPerson
+meta: [TelegramPerson]
+properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
+relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 -------
-Roboy:
-  main_label: Roboy
-  allowed_labels: [Robot, Roboy]
-  allowed_properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
-  allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
+!Robot:
+type: Robot
+meta: [Robot]
+properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
+relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
 -------
-Organisation:
-  main_label: Organisation
-  allowed_labels: [Organisation]
-  allowed_properties: [name, birthdate, timestamp]
-  allowed_relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
+!Roboy:
+type: Roboy
+meta: [Robot, Roboy]
+properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
+relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
 -------
-Company:
-  main_label: Company
-  allowed_labels: [Company, Organisation]
-  allowed_properties: [name, birthdate, timestamp]
-  allowed_relationships: [EQUALS, FROM, WORK_FOR]
+!Organisation:
+type: Organisation
+meta: [Organisation]
+properties: [name, birthdate, timestamp]
+relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
 -------
-University:
-  main_label: University
-  allowed_labels: [University, Organisation]
-  allowed_properties: [name, birthdate, timestamp]
-  allowed_relationships: [EQUALS, FROM, STUDY_AT]
+!Company:
+type: Company
+meta: [Company, Organisation]
+properties: [name, birthdate, timestamp]
+relationships: [EQUALS, FROM, WORK_FOR]
 -------
-Location:
-  main_label: Location
-  allowed_labels: [Location]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
+!University:
+type: University
+meta: [University, Organisation]
+properties: [name, birthdate, timestamp]
+relationships: [EQUALS, FROM, STUDY_AT]
 -------
-City:
-  main_label: City
-  allowed_labels: [City, Location]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
+!Location:
+type: Location
+meta: [Location]
+properties: [name, size, timestamp]
+relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
 -------
-Country:
-  main_label: Country
-  allowed_labels: [Country, Location]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
+!City:
+type: City
+meta: [City, Location]
+properties: [name, size, timestamp]
+relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 -------
-Occupation:
-  main_label: Occupation
-  allowed_labels: [Occupation]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS]
+!Country:
+type: Country
+meta: [Country, Location]
+properties: [name, size, timestamp]
+relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 -------
-Hobby:
-  main_label: Country
-  allowed_labels: [Hobby, Occupation]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, IN]
+!Occupation:
+type: Occupation
+meta: [Occupation]
+properties: [name, size, timestamp]
+relationships: [EQUALS]
 -------
-Job:
-  main_label: Country
-  allowed_labels: [Job, Occupation]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, IN]
+!Hobby:
+type: Country
+meta: [Hobby, Occupation]
+properties: [name, size, timestamp]
+relationships: [EQUALS, IN]
 -------
-Object:
-  main_label: Object
-  allowed_labels: [Object]
-  allowed_properties: [name, size, timestamp]
-  allowed_relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
+!Job:
+type: Country
+meta: [Job, Occupation]
+properties: [name, size, timestamp]
+relationships: [EQUALS, IN]
+-------
+!Object:
+type: Object
+meta: [Object]
+properties: [name, size, timestamp]
+relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
