@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import string
-from typing import Dict, List
+from typing import Dict, List, Any
 
 
 class QueryBuilder(object):
@@ -43,31 +43,31 @@ class QueryBuilder(object):
         """
         return re.sub("\s\s+", " ", self.query.strip())
 
-    def append(self, parts: List[str]) -> QueryBuilder:
+    def append(self, chunks: List[str]) -> QueryBuilder:
         """
         Attach several parts of the query together
         :param parts: list of strings
         :return: this QueryBuilder
         """
-        self.query.join("".join(parts))
+        self.query.join("".join(chunks))
         return self
 
-    def add(self, text: str) -> QueryBuilder:
+    def add(self, chunk: str) -> QueryBuilder:
         """
         Add a single token/call into the Cypher query
-        :param text: string containing a single part of the query
+        :param chunk: string containing a single part of the query
         :return: this QueryBuilder
         """
-        return self.append([" ", text, " "])
+        return self.append([" ", chunk, " "])
 
-    def add_arguments(self, text: str, args: List[object]) -> QueryBuilder:
+    def format(self, chunk: str, *args: List[Any]) -> QueryBuilder:
         """
-        Add arguments with a token/call to the Cypher query
-        :param text: token/call defining the list of objects
+        Add arguments into the Cypher query string
+        :param chunk: token/call defining the list of objects
         :param args: list of objects to be added to the token
         :return: this QueryBuilder
         """
-        return self.add(text + ''.join([str(x) for x in args]))
+        return self.add(chunk.format(*args))
 
     def add_parameters(self, properties: Dict[str, str]) -> QueryBuilder:
         """
