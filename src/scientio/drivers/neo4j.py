@@ -26,12 +26,12 @@ class Neo4j(Operations):
     def __del__(self):
         self._driver.close()
 
-    def create(self, request: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def create(self, request: NodeModel) -> Optional[NodeModel]:
         if True: # The class of Node is in ontology
             return Neo4j().create_node(request)
         return None
 
-    def retrieve(self, request: MemoryNodeModel, node_id: int = None) -> Optional[MemoryNodeModel]:
+    def retrieve(self, request: NodeModel, node_id: int = None) -> Optional[NodeModel]:
         if node_id is not None and node_id >= 0:
             return self.get_node_by_id(node_id)
         elif node_id is None:
@@ -39,12 +39,12 @@ class Neo4j(Operations):
                 return self.get_node(request)
         return None
 
-    def update(self, request: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def update(self, request: NodeModel) -> Optional[NodeModel]:
         if True: # The class of Node is in ontology
             return self.update_node(request)
         return None
 
-    def delete(self, request: MemoryNodeModel) -> bool:
+    def delete(self, request: NodeModel) -> bool:
         if request.get_id() >= 0 and self.retrieve(request, request.get_id()) is not None:
             return self.delete_node(request)
         return False
@@ -58,31 +58,31 @@ class Neo4j(Operations):
             result = session.write_transaction(self._exec_transaction, query=query).single()[0]
         return result
 
-    def create_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def create_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def get_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def get_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def get_node_by_id(self, node_id: int) -> Optional[MemoryNodeModel]:
+    def get_node_by_id(self, node_id: int) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def update_node(self, node: MemoryNodeModel) -> Optional[MemoryNodeModel]:
+    def update_node(self, node: NodeModel) -> Optional[NodeModel]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def delete_node(self, node: MemoryNodeModel) -> bool:
+    def delete_node(self, node: NodeModel) -> bool:
         query = ""  # builder from MNM
         self._exec_query(query)
 
