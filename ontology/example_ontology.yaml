@@ -1,19 +1,16 @@
 ----
 !Person
 name: Person
-meta: []
 properties: [name, sex, full_name, birthdate, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 ----
 !TelegramPerson
 name: TelegramPerson
-meta: []
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 ----
 !Robot
 name: Robot
-meta: []
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
 ----
@@ -25,7 +22,6 @@ relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF
 ----
 !Organisation
 name: Organisation
-meta: []
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
 ----
@@ -43,7 +39,6 @@ relationships: [EQUALS, FROM, STUDY_AT]
 ----
 !Location
 name: Location
-meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
 ----
@@ -61,7 +56,6 @@ relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 ----
 !Occupation
 name: Occupation
-meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS]
 ----
@@ -79,6 +73,5 @@ relationships: [EQUALS, IN]
 ----
 !Object
 name: Object
-meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
