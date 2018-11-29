@@ -6,17 +6,18 @@ from typing import Union, Set, Dict, List
 
 
 class RelationshipAvailability(Enum):
-    """Show availability of a relationship using this Enum."""
+    """
+    Show availability of a relationship using this Enum.
+    """
     ALL_AVAILABLE = 1
     SOME_AVAILABLE = 2
     NONE_AVAILABLE = 3
 
 
 class NodeModel():
-    """Get access to all attributes of a NodeModel in the neo4j memory using this class.
-
+    """
+    Get access to all attributes of a NodeModel in the neo4j memory using this class.
     Attributes of NodeModel: ID, Labels, Relationships, Properties 
-
     """
 
     NAME = "name"
@@ -28,9 +29,7 @@ class NodeModel():
         Args:
             node: create new node from existing node
             label: give new node a main label like "person" or "robot"
-
         """
-
         self.id = 0
         self.labels = set()
         self.label = label
@@ -41,27 +40,39 @@ class NodeModel():
             self.set_node(node)
 
     def reset_id(self):
-        """Reset the node ID."""   
+        """
+        Reset the node ID.
+        """
         self.id = 0
 
     def reset_label(self):
-        """Reset the node main label."""   
+        """
+        Reset the node main label.
+        """
         self.label = None
 
     def reset_labels(self):
-        """Reset all node labels."""   
+        """
+        Reset all node labels.
+        """
         self.labels = set()
 
     def reset_properties(self):
-        """Reset all node properties."""
+        """
+        Reset all node properties.
+        """
         self.properties = dict()
 
     def reset_relationships(self):
-        """Reset all node relationships"""
+        """
+        Reset all node relationships
+        """
         self.relationships = defaultdict(list)
 
     def reset_node(self):
-        """Reset all node attributes."""   
+        """
+        Reset all node attributes.
+        """
         self.reset_id()
         self.reset_label()
         self.reset_labels()
@@ -69,24 +80,32 @@ class NodeModel():
         self.reset_relationships()
 
     def get_id(self):
-        """Get the node ID."""
+        """
+        Get the node ID.
+        """
         return self.id
 
     def set_id(self, node_id):
-        """Set the node ID."""   
+        """
+        Set the node ID.
+        """
         self.id = node_id
 
     def get_label(self):
-        """Get the node main label."""   
+        """
+        Get the node main label.
+        """
         return self.label
 
     def get_labels(self):
-        """Get the set of all node labels."""
+        """
+        Get the set of all node labels.
+        """
         return self.labels
 
     # label can be a single Label or a set of multiple Labels
     def set_labels(self, label):
-        """Set all the node labels."""   
+        """Set all the node labels."""
         self.reset_label()
         self.add_labels(label)
 
@@ -95,8 +114,7 @@ class NodeModel():
 
         Args: 
             label: is either a string or a set of strings.
-
-        """   
+        """
         if isinstance(label, Label):
             self.label = label
             self.labels |= {label}
@@ -109,49 +127,48 @@ class NodeModel():
         Args:
             key: if a key is given then that specific entry is returned
             otherwise the whole dictonary of properties is returned.
-
-        """   
+        """
         if key and key in self.properties:
             return self.properties[key]
         return self.properties
 
     def set_properties(self, **property_values):
-        """Add properties to the existing properties of a node. 
+        """
+        Add properties to the existing properties of a node. 
 
         Args:
             property_values: one or multiple dictonary entries to add.
-
-        """   
+        """
         self.properties.update(property_values)
 
     def get_relationships(self, key: str=None):
-        """Get access to the dictonary of node relationships.
+        """
+        Get access to the dictonary of node relationships.
 
         Args:
             key: if a key is given then that specific entry is returned
             otherwise the whole dictonary of relationships is returned.
-
-        """   
+        """
         if key:
             return self.relationships[key]
         return self.relationships
 
     def set_relationships(self, **ids_per_relationship):
-        """Set a new relationships of a node. 
+        """
+        Set a new relationships of a node. 
 
         Args: 
             ids_per_relationship: one or multiple dictonary entries.
-
-        """   
+        """
         self.reset_relationships()
         self.add_relationships(**ids_per_relationship)
 
     def add_relationships(self, **ids_per_relationship):
-        """Add new relationships to the existing relationships of a node
+        """
+        Add new relationships to the existing relationships of a node
 
         Args: ids_per_relationship: one or multiple dictonary entries.
-
-        """   
+        """
         for key, value in ids_per_relationship.items():
             if isinstance(value, tuple) or isinstance(value, list):
                 self.relationships[key] += value
@@ -159,21 +176,21 @@ class NodeModel():
                 self.relationships[key] += [value]
 
     def has_relationships(self, relationship: str):
-        """Check if node has a specific relationship.
+        """
+        Check if node has a specific relationship.
 
         Args:
             relationship: String that represents an existing relationship type.
-
-        """   
+        """
         return len(self.relationships[relationship]) > 0
 
     def set_node(self, node: NodeModel):
-        """Set a node given an existing node. 
+        """
+        Get a node given an existing node. 
 
         Args:
             node: another NodeModel object.
-
-        """   
+        """
         self.set_id(node.get_id())
         if node.get_label():
             self.set_labels(node.get_label())
@@ -190,28 +207,30 @@ class NodeModel():
             self.set_properties(**node.get_properties())
 
     def get_name(self):
-        """Get the name of the node."""   
+        """
+        Get the name of the node.
+        """
         return self.get_properties(self.NAME)
 
     def add_name(self, name: str):
-        """Add the name of the node to the node properties.
+        """
+        Add the name of the node to the node properties.
 
         Args:
             name: String with node name.
-
-        """   
+        """
         self.set_properties(**{self.NAME : name})
 
     def check_relationship_availability(self, relationships):
-        """Check the availability of certain relationships of a node. 
+        """
+        Check the availability of certain relationships of a node. 
 
         Args:
             relationships: list of relationships.
 
         Returns:
             One member of the RelationshipAvailability Enum: ALL_AVAILABLE, SOME_AVAILABLE, NONE_AVAILABLE 
-
-        """   
+        """
         all_available = True
         at_least_one_available = False
         for predicate in relationships:
@@ -226,7 +245,8 @@ class NodeModel():
         return RelationshipAvailability.NONE_AVAILABLE
 
     def get_purity_relationships(self, predicates: List[str]) -> Dict[bool, List[str]]:
-        """Compare the relationships the node has with a list of relationships. 
+        """
+        Compare the relationships the node has with a list of relationships. 
 
         Args:
             predicates: List of strings representing diffrent relationships.
@@ -234,27 +254,34 @@ class NodeModel():
         Returns:
             A dictonary: the key "True" holds a list of relationships that the node has 
             and the key "False" all relationships the node does not haves
-
-        """   
+        """
         pure_impure_values = {False:list(), True:list()}
         for predicate in predicates:
             pure_impure_values.get(self.has_relationships(predicate)).append(predicate)
         return pure_impure_values
 
     def is_familiar(self):
-        """TODO"""  
+        """
+        TODO
+        """
         pass
 
     def set_strip_query(self, strip):
-        """TODO"""   
+        """
+        TODO
+        """
         self.strip_query = strip
 
     def is_legal(self):
-        """TODO"""
+        """
+        TODO
+        """
         pass
 
     def __eq__(self, other: NodeModel):
-        """Check if two nodes are equal."""   
+        """
+        Check if two nodes are equal.
+        """
         equality = self.get_id() == other.get_id() \
             and self.get_label() == other.get_label() \
             and self.get_labels() == other.get_labels() \
@@ -263,11 +290,15 @@ class NodeModel():
         return equality
 
     def __hash__(self):
-        """Hash node."""   
+        """
+        Hash node.
+        """
         return object.__hash__((self.get_id(), self.get_label(), self.get_labels(), self.get_properties(),
                                 self.get_relationships()))
 
     def __str__(self):
-        """Get string output for node."""
+        """
+        Get string output for node.
+        """
         return f'NodeModel{{ id = {self.id}, labels = {self.labels}, label = {self.label}, properties = {self.properties}, relationships = {self.relationships} }}'
 
