@@ -1,84 +1,84 @@
--------
+----
 !Person
-type: Person
-meta: [Person]
+name: Person
+meta: []
 properties: [name, sex, full_name, birthdate, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
--------
-!TelegramPerson:
-type: TelegramPerson
-meta: [TelegramPerson]
+----
+!TelegramPerson
+name: TelegramPerson
+meta: []
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
--------
-!Robot:
-type: Robot
-meta: [Robot]
+----
+!Robot
+name: Robot
+meta: []
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
--------
-!Roboy:
-type: Roboy
-meta: [Robot, Roboy]
+----
+!Roboy
+name: Roboy
+meta: [Roboy]
 properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
--------
-!Organisation:
-type: Organisation
-meta: [Organisation]
+----
+!Organisation
+name: Organisation
+meta: []
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
--------
-!Company:
-type: Company
-meta: [Company, Organisation]
+----
+!Company
+name: Company
+meta: [Organisation]
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, WORK_FOR]
--------
-!University:
-type: University
-meta: [University, Organisation]
+----
+!University
+name: University
+meta: [Organisation]
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, STUDY_AT]
--------
-!Location:
-type: Location
-meta: [Location]
+----
+!Location
+name: Location
+meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
--------
-!City:
-type: City
-meta: [City, Location]
+----
+!City
+name: City
+meta: [Location]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
--------
-!Country:
-type: Country
-meta: [Country, Location]
+----
+!Country
+name: Country
+meta: [Location]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
--------
-!Occupation:
-type: Occupation
-meta: [Occupation]
+----
+!Occupation
+name: Occupation
+meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS]
--------
-!Hobby:
-type: Country
-meta: [Hobby, Occupation]
+----
+!Hobby
+name: Hobby
+meta: [Occupation]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN]
--------
-!Job:
-type: Country
-meta: [Job, Occupation]
+----
+!Job
+name: Job
+meta: [Occupation]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN]
--------
-!Object:
-type: Object
-meta: [Object]
+----
+!Object
+name: Object
+meta: []
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
