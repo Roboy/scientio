@@ -23,17 +23,17 @@ class NodeModel():
     NAME = "name"
     ID = "id"
 
-    def __init__(self, node=None, label=None):
+    def __init__(self, node=None, concept=None):
         """
         Construct a new node.
 
         Args:
             node: create new node from existing node
-            label: give new node a main label like "person" or "robot"
+            concept: give new node a concept like "person" or "robot"
         """
         self.id = 0
         self.labels = set()
-        self.label = label
+        self.concept = concept
         self.properties = dict()
         self.relationships = defaultdict(list)
         self.strip_query = None
@@ -46,11 +46,11 @@ class NodeModel():
         """
         self.id = 0
 
-    def reset_label(self):
+    def reset_concept(self):
         """
-        Reset the node main label.
+        Reset the node concept.
         """
-        self.label = None
+        self.concept = None
 
     def reset_labels(self):
         """
@@ -75,7 +75,7 @@ class NodeModel():
         Reset all node attributes.
         """
         self.reset_id()
-        self.reset_label()
+        self.reset_concept()
         self.reset_labels()
         self.reset_properties()
         self.reset_relationships()
@@ -92,11 +92,11 @@ class NodeModel():
         """
         self.id = node_id
 
-    def get_label(self):
+    def get_concept(self):
         """
-        Get the node main label.
+        Get the node concept.
         """
-        return self.label
+        return self.concept
 
     def get_labels(self):
         """
@@ -104,20 +104,19 @@ class NodeModel():
         """
         return self.labels
 
-    # label can be a single Label or a set of multiple Labels
     def set_labels(self, label):
         """Set all the node labels."""
-        self.reset_label()
+        self.reset_concept()
         self.add_labels(label)
 
     def add_labels(self, label: Union[Label, Set[Label]]):
-        """Add new labels to the existing labels of the node.
+        """Add new labels to the existing labels of the node and set the concept.
 
         Args: 
             label: is either a string or a set of strings.
         """
         if isinstance(label, Label):
-            self.label = label
+            self.concept = label
             self.labels |= {label}
         elif isinstance(label, set):
             self.labels |= label
@@ -193,8 +192,8 @@ class NodeModel():
             node: another NodeModel object.
         """
         self.set_id(node.get_id())
-        if node.get_label():
-            self.set_labels(node.get_label())
+        if node.get_concept():
+            self.set_labels(node.get_concept())
             self.add_labels(node.get_labels())
         else:
             self.set_labels(node.get_labels())
@@ -278,7 +277,7 @@ class NodeModel():
         Check if two nodes are equal.
         """
         equality = self.get_id() == other.get_id() \
-            and self.get_label() == other.get_label() \
+            and self.get_concept() == other.get_concept() \
             and self.get_labels() == other.get_labels() \
             and self.get_properties() == other.get_properties() \
             and self.get_relationships() == other.get_relationships()
@@ -288,12 +287,12 @@ class NodeModel():
         """
         Hash node.
         """
-        return object.__hash__((self.get_id(), self.get_label(), self.get_labels(), self.get_properties(),
+        return object.__hash__((self.get_id(), self.get_concept(), self.get_labels(), self.get_properties(),
                                 self.get_relationships()))
 
     def __str__(self):
         """
         Get string output for node.
         """
-        return f'NodeModel{{ id = {self.id}, labels = {self.labels}, label = {self.label}, properties = {self.properties}, relationships = {self.relationships} }}'
+        return f'NodeModel{{ id = {self.id}, labels = {self.labels}, concept = {self.concept}, properties = {self.properties}, relationships = {self.relationships} }}'
 
