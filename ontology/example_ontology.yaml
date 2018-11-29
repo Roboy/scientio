@@ -1,96 +1,83 @@
-# Node classes
 Person:
   main_label: Person
   allowed_labels: [Person]
   allowed_properties: [name, sex, full_name, birthdate, timestamp]
   allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
-
+-------
 TelegramPerson:
   main_label: TelegramPerson
   allowed_labels: [TelegramPerson]
   allowed_properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
   allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
-
+-------
 Robot:
   main_label: Robot
   allowed_labels: [Robot]
   allowed_properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
   allowed_relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
-
+-------
 Roboy:
   main_label: Roboy
   allowed_labels: [Robot, Roboy]
   allowed_properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
   allowed_relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
-
+-------
 Organisation:
   main_label: Organisation
   allowed_labels: [Organisation]
   allowed_properties: [name, birthdate, timestamp]
   allowed_relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
-
+-------
 Company:
   main_label: Company
   allowed_labels: [Company, Organisation]
   allowed_properties: [name, birthdate, timestamp]
   allowed_relationships: [EQUALS, FROM, WORK_FOR]
-
+-------
 University:
   main_label: University
   allowed_labels: [University, Organisation]
   allowed_properties: [name, birthdate, timestamp]
   allowed_relationships: [EQUALS, FROM, STUDY_AT]
-
+-------
 Location:
   main_label: Location
   allowed_labels: [Location]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
-
+-------
 City:
   main_label: City
   allowed_labels: [City, Location]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
-
+-------
 Country:
   main_label: Country
   allowed_labels: [Country, Location]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
-
+-------
 Occupation:
   main_label: Occupation
   allowed_labels: [Occupation]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS]
-
+-------
 Hobby:
   main_label: Country
   allowed_labels: [Hobby, Occupation]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, IN]
-
+-------
 Job:
   main_label: Country
   allowed_labels: [Job, Occupation]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, IN]
-
+-------
 Object:
   main_label: Object
   allowed_labels: [Object]
   allowed_properties: [name, size, timestamp]
   allowed_relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
-
-Other:
-  main_label: Other
-  allowed_labels: [Other]
-  allowed_properties: []
-  allowed_relationships: []
-
-# Relationships
-Relationships: [GRASP, HEAR, EQUALS, HAS_HOBBY, IN, MEMBER_OF, OCCUPIED_AS, PART_OF, BORN_IN, SEE, FROM, TOUCH, PLAY, STUDY_AT, WORK_FOR, SUBSIDIARY_OF, TURN_ON, FRIEND_OF, CHILD_OF, LIVE_IN, KNOW, SIBLING_OF]
-
-# Properties
-Properties: [facebook_id, telegram_id, slack_id, whatsapp_id, line_id, birthdate, abilities, skills, future, color, speed, price, temperature, usage, size, longitude, latitude, altitude, area, population, size, type]
