@@ -267,12 +267,6 @@ class NodeModel():
         """
         pass
 
-    def set_strip_query(self, strip):
-        """
-        TODO
-        """
-        self.strip_query = strip
-
     def is_legal(self):
         """
         TODO
