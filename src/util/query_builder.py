@@ -75,12 +75,10 @@ class QueryBuilder(object):
         :param properties: properties of the node
         :return: this QueryBuilder
         """
-        if properties is None:
-            return self
         param_list: [str] = []
         for key, value in properties.items():
-            param_list.append(str(key) + ":'" + str(value) + "'")
-        return self.add("{" + ', '.join(param_list) + "}")
+            param_list.append(f"{key}: '{value}'")
+        return self.add(f"{{{', '.join(param_list)}}}")
 
     def match_by_id(self, id: int, letter: str) -> QueryBuilder:
         """
@@ -89,7 +87,7 @@ class QueryBuilder(object):
         :param letter: a variable identifying the node in the Cypher query
         :return: this QueryBuilder
         """
-        return self.add("MATCH (" + letter + ") WHERE ID(" + letter + ")=" + str(id))
+        return self.add(f"MATCH ({letter}) WHERE ID({letter})={id}")
 
     def set_values(self, properties: Dict[str, str], letter: str) -> QueryBuilder:
         """
@@ -99,5 +97,5 @@ class QueryBuilder(object):
         :return: this QueryBuilder
         """
         for key, value in properties.items():
-            self.add("SET " + letter + "." + key + "='" + value + "'")
+            self.add(f"SET {letter}.{key}='{value}'")
         return self
