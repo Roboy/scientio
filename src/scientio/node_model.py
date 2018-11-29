@@ -24,7 +24,8 @@ class NodeModel():
     ID = "id"
 
     def __init__(self, node=None, label=None):
-        """Construct a new node.
+        """
+        Construct a new node.
 
         Args:
             node: create new node from existing node
