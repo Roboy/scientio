@@ -1,83 +1,83 @@
 -------
-!Person
+!Type
 type: Person
 meta: [Person]
 properties: [name, sex, full_name, birthdate, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 -------
-!TelegramPerson:
+!Type
 type: TelegramPerson
 meta: [TelegramPerson]
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
 -------
-!Robot:
+!Type
 type: Robot
 meta: [Robot]
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
 -------
-!Roboy:
+!Type
 type: Roboy
 meta: [Robot, Roboy]
 properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
 -------
-!Organisation:
+!Type
 type: Organisation
 meta: [Organisation]
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
 -------
-!Company:
+!Type
 type: Company
 meta: [Company, Organisation]
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, WORK_FOR]
 -------
-!University:
+!Type
 type: University
 meta: [University, Organisation]
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, STUDY_AT]
 -------
-!Location:
+!Type
 type: Location
 meta: [Location]
 properties: [name, size, timestamp]
 relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
 -------
-!City:
+!Type
 type: City
 meta: [City, Location]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 -------
-!Country:
+!Type
 type: Country
 meta: [Country, Location]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 -------
-!Occupation:
+!Type
 type: Occupation
 meta: [Occupation]
 properties: [name, size, timestamp]
 relationships: [EQUALS]
 -------
-!Hobby:
+!Type
 type: Country
 meta: [Hobby, Occupation]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN]
 -------
-!Job:
+!Type
 type: Country
 meta: [Job, Occupation]
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN]
 -------
-!Object:
+!Type
 type: Object
 meta: [Object]
 properties: [name, size, timestamp]
