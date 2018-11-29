@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.scientio.memory_node_model import MemoryNodeModel
+from scientio.node import Node
 
 
 class Operations(ABC):
@@ -7,35 +7,35 @@ class Operations(ABC):
     Interface for CRUD operations within a graph memory
     """
     @abstractmethod
-    def create(self, request: MemoryNodeModel) -> MemoryNodeModel:
+    def create(self, request: Node) -> Node:
         """
         Create a node
         :param request:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
     @abstractmethod
-    def retrieve(self, request: MemoryNodeModel, node_id: int = None) -> MemoryNodeModel:
+    def retrieve(self, request: Node, node_id: int = None) -> Node:
         """
         Get node by ID
         :param request:
         :param node_id:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
     @abstractmethod
-    def update(self, request: MemoryNodeModel) -> MemoryNodeModel:
+    def update(self, request: Node) -> Node:
         """
         Update Nodes
         :param request:
-        :return: MemoryNodeModel
+        :return: NodeModel
         """
         return NotImplemented
 
     @abstractmethod
-    def delete(self, request: MemoryNodeModel) -> bool:
+    def delete(self, request: Node) -> bool:
         """
         Delete a Node
         :param request:

@@ -1,6 +1,6 @@
 from . ontology import Ontology
 from src.scientio.interfaces.operations import Operations
-from . memory_node_model import MemoryNodeModel
+from . node import Node
 import sys
 
 
@@ -11,16 +11,16 @@ class Session(Operations):
     def __init__(self, *, driver_name: str="drivers.Neo4j", ontology: Ontology, **kwargs):
         pass
 
-    def create(self, request: MemoryNodeModel) -> MemoryNodeModel:
+    def create(self, request: Node) -> Node:
         return self._driver.create(request)
 
-    def retrieve(self, request: MemoryNodeModel, node_id: int = None) -> MemoryNodeModel:
+    def retrieve(self, request: Node, node_id: int = None) -> Node:
         return self._driver.retrieve(request, node_id)
 
-    def update(self, request: MemoryNodeModel) -> MemoryNodeModel:
+    def update(self, request: Node) -> Node:
         return self._driver.update(request)
 
-    def delete(self, request: MemoryNodeModel) -> bool:
+    def delete(self, request: Node) -> bool:
         return self._driver.delete(request)
 
     @staticmethod
