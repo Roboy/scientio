@@ -1,5 +1,5 @@
 from . ontology import Ontology
-from . operations import Operations
+from src.scientio.interfaces.operations import Operations
 from . node_model import NodeModel
 import sys
 
