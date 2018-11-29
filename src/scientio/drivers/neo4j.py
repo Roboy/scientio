@@ -1,8 +1,8 @@
 from src.scientio.interfaces.operations import Operations
 from src.scientio.ontology import Ontology
+from scientio.node import Node
 from neo4j import GraphDatabase
 
-from scientio.node_model import NodeModel
 from typing import Optional
 
 
@@ -26,12 +26,12 @@ class Neo4j(Operations):
     def __del__(self):
         self._driver.close()
 
-    def create(self, request: NodeModel) -> Optional[NodeModel]:
+    def create(self, request: Node) -> Optional[Node]:
         if True: # The class of Node is in ontology
             return Neo4j().create_node(request)
         return None
 
-    def retrieve(self, request: NodeModel, node_id: int = None) -> Optional[NodeModel]:
+    def retrieve(self, request: Node, node_id: int = None) -> Optional[Node]:
         if node_id is not None and node_id >= 0:
             return self.get_node_by_id(node_id)
         elif node_id is None:
@@ -39,12 +39,12 @@ class Neo4j(Operations):
                 return self.get_node(request)
         return None
 
-    def update(self, request: NodeModel) -> Optional[NodeModel]:
+    def update(self, request: Node) -> Optional[Node]:
         if True: # The class of Node is in ontology
             return self.update_node(request)
         return None
 
-    def delete(self, request: NodeModel) -> bool:
+    def delete(self, request: Node) -> bool:
         if request.get_id() >= 0 and self.retrieve(request, request.get_id()) is not None:
             return self.delete_node(request)
         return False
@@ -58,31 +58,31 @@ class Neo4j(Operations):
             result = session.write_transaction(self._exec_transaction, query=query).single()[0]
         return result
 
-    def create_node(self, node: NodeModel) -> Optional[NodeModel]:
+    def create_node(self, node: Node) -> Optional[Node]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def get_node(self, node: NodeModel) -> Optional[NodeModel]:
+    def get_node(self, node: Node) -> Optional[Node]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def get_node_by_id(self, node_id: int) -> Optional[NodeModel]:
+    def get_node_by_id(self, node_id: int) -> Optional[Node]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def update_node(self, node: NodeModel) -> Optional[NodeModel]:
+    def update_node(self, node: Node) -> Optional[Node]:
         query = ""  # builder from MNM
         result = self._exec_query(query)
         result_node = None  # node from result
         return result_node
 
-    def delete_node(self, node: NodeModel) -> bool:
+    def delete_node(self, node: Node) -> bool:
         query = ""  # builder from MNM
         self._exec_query(query)
 
