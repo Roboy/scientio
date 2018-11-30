@@ -14,7 +14,7 @@ class Neo4j(Operations):
     _driver: GraphDatabase.driver
     _ontology: Ontology
 
-    def __init__(self, **kwargs):
+    def __init__(self, *, ontology, **kwargs):
         try:
             uri = kwargs['neo4j_address']
             user = kwargs['neo4j_username']
@@ -28,7 +28,7 @@ class Neo4j(Operations):
 
     def create(self, request: Node) -> Optional[Node]:
         if True: # The class of Node is in ontology
-            return Neo4j().create_node(request)
+            return self.create_node(request)
         return None
 
     def retrieve(self, request: Node, node_id: int = None) -> Optional[Node]:
