@@ -1,6 +1,6 @@
-from . node import Node
-from . node import RelationshipAvailability
-from . concept import Concept
+from src.scientio.node import Node
+from src.scientio.node import RelationshipAvailability
+from src.scientio.concept import Concept
 
 import pytest
 
