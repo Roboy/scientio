@@ -23,7 +23,7 @@ class Node():
     NAME = "name"
     ID = "id"
 
-    def __init__(self, node=None, concept=None):
+    def __init__(self, node=None, concept: str=None):
         """
         Construct a new node.
 
@@ -184,16 +184,16 @@ class Node():
         """
         return len(self.relationships[relationship]) > 0
 
-    def set_node(self, node: Node):
+    def set_node(self, node):
         """
-        Get a node given an existing node. 
+        Set a node given an existing node. 
 
         Args:
             node: another Node object.
         """
         self.set_id(node.get_id())
-        if node.get_concept():
-            self.set_concepts(node.get_concept())
+        if self.get_concept():
+            self.concept = node.get_concept()
             self.add_concepts(node.get_concepts())
         else:
             self.set_concepts(node.get_concepts())
@@ -272,7 +272,7 @@ class Node():
         """
         pass
 
-    def __eq__(self, other: Node):
+    def __eq__(self, other):
         """
         Check if two nodes are equal.
         """
