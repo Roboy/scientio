@@ -1,8 +1,7 @@
 from __future__ import annotations
-
-import copy
 from typing import FrozenSet, Optional
 
+import copy
 import yaml
 
 from src.scientio.ontology.otype import OType

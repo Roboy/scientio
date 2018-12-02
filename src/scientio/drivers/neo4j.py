@@ -1,9 +1,10 @@
-from src.scientio.interfaces.operations import Operations
-from src.scientio.ontology import Ontology
-from scientio.node import Node
+from typing import Optional
+
 from neo4j import GraphDatabase
 
-from typing import Optional
+from src.scientio.interfaces.operations import Operations
+from src.scientio.ontology.node import Node
+from src.scientio.ontology.ontology import Ontology
 
 
 class Neo4j(Operations):

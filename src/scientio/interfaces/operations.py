@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from scientio.node import Node
+
+from src.scientio.ontology.node import Node
 
 
 class Operations(ABC):

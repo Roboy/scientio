@@ -1,9 +1,9 @@
-
-from scientio.ontology import Ontology
-from scientio.node import Node
-from scientio.interfaces.operations import Operations
-from scientio.drivers.neo4j import Neo4j
 from typing import Type
+
+from src.scientio.drivers.neo4j import Neo4j
+from src.scientio.interfaces.operations import Operations
+from src.scientio.ontology.node import Node
+from src.scientio.ontology.ontology import Ontology
 
 
 class Session(Operations):

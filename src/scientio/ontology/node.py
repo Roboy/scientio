@@ -1,5 +1,4 @@
-from scientio.concept import Concept
-
+from __future__ import annotations
 from enum import Enum
 from collections import defaultdict
 from typing import Union, Set, Dict, List
@@ -17,7 +16,7 @@ class RelationshipAvailability(Enum):
 class Node():
     """
     Get access to all attributes of a Node in the neo4j memory using this class.
-    Attributes of Node: ID, Concepts, Relationships, Properties 
+    Attributes of Node: ID, Concepts, Relationships, Properties
     """
 
     NAME = "name"
@@ -112,7 +111,7 @@ class Node():
     def add_concepts(self, concept: Union[Concept, Set[Concept]]):
         """Add new concepts to the existing concepts of the node and set the concept.
 
-        Args: 
+        Args:
             concept: is either a string or a set of strings.
         """
         if isinstance(concept, Concept):
@@ -122,8 +121,8 @@ class Node():
             self.concepts |= concept
 
     def get_properties(self, key: str=None):
-        """Get access to the dictonary of node properties. 
-        
+        """Get access to the dictonary of node properties.
+
         Args:
             key: if a key is given then that specific entry is returned
             otherwise the whole dictonary of properties is returned.
@@ -134,7 +133,7 @@ class Node():
 
     def set_properties(self, **property_values):
         """
-        Add properties to the existing properties of a node. 
+        Add properties to the existing properties of a node.
 
         Args:
             property_values: one or multiple dictonary entries to add.
@@ -155,9 +154,9 @@ class Node():
 
     def set_relationships(self, **ids_per_relationship):
         """
-        Set a new relationships of a node. 
+        Set a new relationships of a node.
 
-        Args: 
+        Args:
             ids_per_relationship: one or multiple dictonary entries.
         """
         self.reset_relationships()
@@ -186,7 +185,7 @@ class Node():
 
     def set_node(self, node: Node):
         """
-        Get a node given an existing node. 
+        Get a node given an existing node.
 
         Args:
             node: another Node object.
@@ -223,13 +222,13 @@ class Node():
 
     def check_relationship_availability(self, relationships):
         """
-        Check the availability of certain relationships of a node. 
+        Check the availability of certain relationships of a node.
 
         Args:
             relationships: list of relationships.
 
         Returns:
-            One member of the RelationshipAvailability Enum: ALL_AVAILABLE, SOME_AVAILABLE, NONE_AVAILABLE 
+            One member of the RelationshipAvailability Enum: ALL_AVAILABLE, SOME_AVAILABLE, NONE_AVAILABLE
         """
         all_available = True
         at_least_one_available = False
@@ -246,13 +245,13 @@ class Node():
 
     def get_purity_relationships(self, predicates: List[str]) -> Dict[bool, List[str]]:
         """
-        Compare the relationships the node has with a list of relationships. 
+        Compare the relationships the node has with a list of relationships.
 
         Args:
             predicates: List of strings representing diffrent relationships.
 
         Returns:
-            A dictonary: the key "True" holds a list of relationships that the node has 
+            A dictonary: the key "True" holds a list of relationships that the node has
             and the key "False" all relationships the node does not haves
         """
         pure_impure_values = {False:list(), True:list()}

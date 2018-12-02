@@ -1,4 +1,0 @@
-
-
-class Ontology:
-    pass
