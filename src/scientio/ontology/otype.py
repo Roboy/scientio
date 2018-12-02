@@ -4,7 +4,7 @@ import yaml
 
 
 class OType(yaml.YAMLObject):
-    yaml_tag = u'!Type'
+    yaml_tag = u'!OType'
 
     def __init__(self, entity, properties, relationships, meta):
         self.entity: str = entity

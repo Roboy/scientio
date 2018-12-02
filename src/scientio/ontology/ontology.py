@@ -5,7 +5,7 @@ from typing import FrozenSet, Optional
 
 import yaml
 
-from src.ontology.otype import OType
+from src.scientio.ontology.otype import OType
 
 
 class Ontology(object):
