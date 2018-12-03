@@ -23,30 +23,35 @@ class Neo4j(Operations):
         except KeyError as e:
             raise e
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
+        self._ontology = ontology
 
     def __del__(self):
         self._driver.close()
 
     def create(self, request: Node) -> Optional[Node]:
-        if True: # The class of Node is in ontology
+        if self._ontology.__contains__(request.get_type()): # The class of Node is in ontology
             return self.create_node(request)
-        return None
+        else:
+            print(f"No such type in ontology: the Node OType {request.get_type()} is missing") # Error
+            return None
 
-    def retrieve(self, request: Node, node_id: int = None) -> Optional[Node]:
-        if node_id is not None and node_id >= 0:
-            return self.get_node_by_id(node_id)
-        elif node_id is None:
-            if True: # The class of Node is in ontology
+    def retrieve(self, request: Node) -> Optional[Node]:
+        if request.get_id() >= 0:
+            return self.get_node_by_id(request.get_id())
+        else:
+            if self._ontology.__contains__(request.get_type()): # The class of Node is in ontology
+                print(f"No such type in ontology: the Node OType {request.get_type()} is missing")  # Error
                 return self.get_node(request)
         return None
 
     def update(self, request: Node) -> Optional[Node]:
-        if True: # The class of Node is in ontology
+        if self._ontology.__contains__(request.get_type()): # The class of Node is in ontology
+            print(f"No such type in ontology: the Node OType {request.get_type()} is missing")  # Error
             return self.update_node(request)
         return None
 
     def delete(self, request: Node) -> bool:
-        if request.get_id() >= 0 and self.retrieve(request, request.get_id()) is not None:
+        if request.get_id() >= 0:
             return self.delete_node(request)
         return False
 

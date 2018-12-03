@@ -42,3 +42,6 @@ class Ontology(object):
             if element.entity == entity:
                 return element
         return None
+
+    def __contains__(self, item: OType):
+        return item in self.types

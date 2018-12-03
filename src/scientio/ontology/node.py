@@ -1,7 +1,12 @@
 from __future__ import annotations
+
+import copy
 from enum import Enum
 from collections import defaultdict
-from typing import Union, Set, Dict, List
+from typing import Union, Set, Dict, List, FrozenSet, Optional
+
+from src.scientio.ontology.json_node import JsonNode
+from src.scientio.ontology.otype import OType
 
 
 class RelationshipAvailability(Enum):
@@ -13,16 +18,22 @@ class RelationshipAvailability(Enum):
     NONE_AVAILABLE = 3
 
 
-class Node():
+class Node(object):
     """
     Get access to all attributes of a Node in the neo4j memory using this class.
     Attributes of Node: ID, Concepts, Relationships, Properties
     """
 
-    NAME = "name"
-    ID = "id"
+    NAME_STR: str = "name"
+    ID_STR: str = "id"
+    id: int
+    otype: OType
+    entity: str
+    meta: FrozenSet[str]
+    properties: Dict[str, str]
+    relationships: Dict[str, List[int]]
 
-    def __init__(self, node=None, concept=None):
+    def __init__(self, node: Node = None, otype: OType = None):
         """
         Construct a new node.
 
@@ -30,95 +41,103 @@ class Node():
             node: create new node from existing node
             concept: give new node a concept like "person" or "robot"
         """
-        self.id = 0
-        self.concept = concept
-        self.concepts = set()
-        self.properties = dict()
-        self.relationships = defaultdict(list)
-        self.strip_query = None
         if node is not None:
             self.set_node(node)
+        elif otype is not None:
+            self.id = -1
+            self.otype = otype
+            self.entity = otype.entity
+            self.meta = otype.meta
+            self.properties = dict().fromkeys(otype.properties, None)
+            self.relationships = dict().fromkeys(otype.relationships, [])
+        else:
+            self.id = -1
 
-    def reset_id(self):
+    def wipe_id(self):
         """
         Reset the node ID.
         """
-        self.id = 0
+        self.id = -1
 
-    def reset_concept(self):
+    def wipe_type(self):
         """
         Reset the node concept.
         """
-        self.concept = None
+        self.otype = None
 
-    def reset_concepts(self):
+    def wipe_entity(self):
         """
         Reset all node concepts.
         """
-        self.concepts = set()
+        self.entity = ""
 
-    def reset_properties(self):
+    def wipe_meta(self):
+        """
+        Reset all node concepts.
+        """
+        self.meta = frozenset()
+
+    def wipe_properties(self):
         """
         Reset all node properties.
         """
         self.properties = dict()
 
-    def reset_relationships(self):
+    def wipe_relationships(self):
         """
         Reset all node relationships
         """
         self.relationships = defaultdict(list)
 
-    def reset_node(self):
+    def wipe_node(self):
         """
         Reset all node attributes.
         """
-        self.reset_id()
-        self.reset_concept()
-        self.reset_concepts()
-        self.reset_properties()
-        self.reset_relationships()
+        self.wipe_id()
+        self.wipe_type()
+        self.wipe_entity()
+        self.wipe_meta()
+        self.wipe_properties()
+        self.wipe_relationships()
 
-    def get_id(self):
+    def get_id(self) -> int:
         """
         Get the node ID.
         """
         return self.id
 
-    def set_id(self, node_id):
+    def set_id(self, id: int):
         """
         Set the node ID.
         """
-        self.id = node_id
+        self.id = id
 
-    def get_concept(self):
+    def get_type(self) -> OType:
         """
-        Get the node concept.
+        Get the node OType.
         """
-        return self.concept
+        return self.otype
 
-    def get_concepts(self):
+    def set_type(self, otype: OType):
         """
-        Get the set of all node concepts.
+        Get the node OType.
         """
-        return self.concepts
+        self.otype = otype
 
-    def set_concepts(self, concept):
-        """Set all the node concepts."""
-        self.reset_concept()
-        self.add_concepts(concept)
+    def get_entity(self) -> str:
+        return self.entity
 
-    def add_concepts(self, concept: Union[Concept, Set[Concept]]):
-        """Add new concepts to the existing concepts of the node and set the concept.
-
-        Args:
-            concept: is either a string or a set of strings.
+    def get_meta(self) -> FrozenSet:
         """
-        if isinstance(concept, Concept):
-            self.concept = concept
-            self.concepts |= {concept}
-        elif isinstance(concept, set):
-            self.concepts |= concept
+        Get the set of all node meta.
+        """
+        return self.meta
+
+    def set_meta(self, meta: FrozenSet):
+        """
+        Set all the node meta.
+        """
+        self.meta = meta
 
     def get_properties(self, key: str=None):
         """Get access to the dictonary of node properties.
@@ -127,18 +146,27 @@ class Node():
             key: if a key is given then that specific entry is returned
             otherwise the whole dictonary of properties is returned.
         """
-        if key and key in self.properties:
+        if key and key in self.properties.keys():
             return self.properties[key]
         return self.properties
 
-    def set_properties(self, **property_values):
+    def add_properties(self, values: Dict[str, str]):
         """
         Add properties to the existing properties of a node.
 
         Args:
-            property_values: one or multiple dictonary entries to add.
+            values: one or multiple dictonary entries to add.
         """
-        self.properties.update(property_values)
+        self.properties.update(dict((x, y) for x, y in values.items() if x in self.properties.keys()))
+
+    def set_properties(self, values: Dict[str, str]):
+        """
+        Add properties to the existing properties of a node.
+
+        Args:
+            values: one or multiple dictonary entries to add.
+        """
+        self.properties = dict((x, y) for x, y in values.items() if x in self.properties.keys())
 
     def get_relationships(self, key: str=None):
         """
@@ -148,33 +176,30 @@ class Node():
             key: if a key is given then that specific entry is returned
             otherwise the whole dictonary of relationships is returned.
         """
-        if key:
+        if key and key in self.relationships.keys():
             return self.relationships[key]
         return self.relationships
 
-    def set_relationships(self, **ids_per_relationship):
-        """
-        Set a new relationships of a node.
-
-        Args:
-            ids_per_relationship: one or multiple dictonary entries.
-        """
-        self.reset_relationships()
-        self.add_relationships(**ids_per_relationship)
-
-    def add_relationships(self, **ids_per_relationship):
+    def add_relationships(self, values: Dict[str, List[int]]):
         """
         Add new relationships to the existing relationships of a node
 
         Args: ids_per_relationship: one or multiple dictonary entries.
         """
-        for key, value in ids_per_relationship.items():
-            if isinstance(value, tuple) or isinstance(value, list):
-                self.relationships[key] += value
-            else:
-                self.relationships[key] += [value]
+        for key, val in values.items():
+            if key in self.relationships.keys():
+                self.relationships[key] = list(set(self.relationships.get(key) + val if isinstance(val, list) else [val]))
 
-    def has_relationships(self, relationship: str):
+    def set_relationships(self, values: Dict[str, List[int]]):
+        """
+        Set a new relationships of a node.
+
+        Args:
+            values: one or multiple dictonary entries.
+        """
+        self.relationships = dict((x, y) for x, y in values.items() if x in self.relationships.keys())
+
+    def has_relationship(self, relationship: str) -> bool:
         """
         Check if node has a specific relationship.
 
@@ -190,26 +215,19 @@ class Node():
         Args:
             node: another Node object.
         """
-        self.set_id(node.get_id())
-        if node.get_concept():
-            self.set_concepts(node.get_concept())
-            self.add_concepts(node.get_concepts())
-        else:
-            self.set_concepts(node.get_concepts())
-        if not node.get_relationships():
-            self.reset_relationships()
-        else:
-            self.set_relationships(**node.get_relationships())
-        if not node.get_properties():
-            self.reset_properties()
-        else:
-            self.set_properties(**node.get_properties())
+        self.id = copy.deepcopy(node.get_id())
+        if node.get_type():
+            self.otype = copy.deepcopy(node.get_type())
+            self.entity = copy.deepcopy(node.get_entity())
+            self.meta = copy.deepcopy(node.get_meta())
+            self.properties = copy.deepcopy(node.get_properties())
+            self.relationships = copy.deepcopy(node.get_relationships())
 
     def get_name(self):
         """
         Get the name of the node.
         """
-        return self.get_properties(self.NAME)
+        return self.get_properties(self.NAME_STR)
 
     def add_name(self, name: str):
         """
@@ -218,7 +236,7 @@ class Node():
         Args:
             name: String with node name.
         """
-        self.set_properties(**{self.NAME : name})
+        self.set_properties(**{self.NAME_STR: name})
 
     def check_relationship_availability(self, relationships):
         """
@@ -233,7 +251,7 @@ class Node():
         all_available = True
         at_least_one_available = False
         for predicate in relationships:
-            if self.has_relationships(predicate):
+            if self.has_relationship(predicate):
                 at_least_one_available = True
             else:
                 all_available = False
@@ -243,7 +261,7 @@ class Node():
             return RelationshipAvailability.SOME_AVAILABLE
         return RelationshipAvailability.NONE_AVAILABLE
 
-    def get_purity_relationships(self, predicates: List[str]) -> Dict[bool, List[str]]:
+    def get_relationships_purity(self, predicates: List[str]) -> Dict[bool, List[str]]:
         """
         Compare the relationships the node has with a list of relationships.
 
@@ -256,7 +274,7 @@ class Node():
         """
         pure_impure_values = {False:list(), True:list()}
         for predicate in predicates:
-            pure_impure_values.get(self.has_relationships(predicate)).append(predicate)
+            pure_impure_values.get(self.has_relationship(predicate)).append(predicate)
         return pure_impure_values
 
     def is_familiar(self):
@@ -271,13 +289,20 @@ class Node():
         """
         pass
 
+    def to_json(self) -> Optional[JsonNode]:
+        """
+        TODO
+        """
+        return None
+
     def __eq__(self, other: Node):
         """
         Check if two nodes are equal.
         """
         equality = self.get_id() == other.get_id() \
-            and self.get_concept() == other.get_concept() \
-            and self.get_concepts() == other.get_concepts() \
+            and self.get_type() == other.get_type() \
+            and self.get_entity() == other.get_entity() \
+            and self.get_meta() == other.get_meta() \
             and self.get_properties() == other.get_properties() \
             and self.get_relationships() == other.get_relationships()
         return equality
@@ -286,12 +311,17 @@ class Node():
         """
         Hash node.
         """
-        return object.__hash__((self.get_id(), self.get_concept(), self.get_concepts(), self.get_properties(),
-                                self.get_relationships()))
+        return object.__hash__((self.get_id(), self.get_type(), self.get_entity(), self.get_meta(),
+                                self.get_properties(), self.get_relationships()))
 
     def __str__(self):
         """
         Get string output for node.
         """
-        return f'Node{{ id = {self.id}, concepts = {self.concepts}, concept = {self.concept}, properties = {self.properties}, relationships = {self.relationships} }}'
+        return f'Node(id = {self.id}, ' \
+               f'type = {self.otype}, ' \
+               f'entity = {self.entity}' \
+               f'meta = {self.meta}, ' \
+               f'properties = {self.properties}, ' \
+               f'relationships = {self.relationships})'
 

@@ -17,11 +17,10 @@ class Operations(ABC):
         return NotImplemented
 
     @abstractmethod
-    def retrieve(self, request: Node, node_id: int = None) -> Node:
+    def retrieve(self, request: Node) -> Node:
         """
         Get node by ID
         :param request:
-        :param node_id:
         :return: NodeModel
         """
         return NotImplemented

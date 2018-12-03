@@ -18,3 +18,10 @@ class OType(yaml.YAMLObject):
                f"properties={list(self.properties)}, " \
                f"relationships={list(self.relationships)}, " \
                f"meta={list(self.meta)})"
+
+    def __eq__(self, other: object):
+        return isinstance(other, OType) and \
+            self.entity == other.entity and \
+            self.properties == other.properties and \
+            self.relationships == other.relationships and \
+            self.meta == other.meta

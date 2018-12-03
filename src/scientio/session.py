@@ -64,7 +64,7 @@ class Session(Operations):
          to retrieve the Node with the specified integer id.
         :return: A Node which matches the criteria, None if no such Node exists.
         """
-        return self._driver.retrieve(request, node_id)
+        return self._driver.retrieve(request)
 
     def update(self, request: Node) -> Node:
         """
