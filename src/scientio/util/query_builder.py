@@ -18,7 +18,7 @@ class QueryBuilder(object):
     TODO: Break down builder.add("MATCH (n)-[r]-(m) WHERE ID(n)=%d RETURN TYPE(r) as name, COLLECT(ID(m)) as ids", id)
 
     """
-    query: string = '' # String storing a Cypher query
+    query: string = ''  # String storing a Cypher query
 
     def __init__(self, query: string = None, builder: QueryBuilder = None):
         """
@@ -36,7 +36,7 @@ class QueryBuilder(object):
         else:
             self.query = ''
 
-    def get(self) -> string:
+    def get(self) -> str:
         """
         Access the query string representation
         :return: string representing a query
@@ -49,7 +49,7 @@ class QueryBuilder(object):
         :param parts: list of strings
         :return: this QueryBuilder
         """
-        self.query.join("".join(chunks))
+        self.query += "".join(chunks)
         return self
 
     def add(self, chunk: str) -> QueryBuilder:
@@ -59,6 +59,14 @@ class QueryBuilder(object):
         :return: this QueryBuilder
         """
         return self.append([" ", chunk, " "])
+
+    def add_meta(self, meta: frozenset) -> QueryBuilder:
+        """
+        Add a single token/call into the Cypher query
+        :param meta: frozenset containing meta of the node
+        :return: this QueryBuilder
+        """
+        return self.add(":" + ":".join(meta))
 
     def format(self, chunk: str, *args: List[Any]) -> QueryBuilder:
         """
@@ -76,6 +84,7 @@ class QueryBuilder(object):
         :return: this QueryBuilder
         """
         param_list: [str] = []
+        print()
         for key, value in properties.items():
             param_list.append(f"{key}: '{value}'")
         return self.add(f"{{{', '.join(param_list)}}}")
