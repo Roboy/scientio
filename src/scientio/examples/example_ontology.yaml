@@ -50,21 +50,21 @@ relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 meta: [Location]
 --- !OType
 entity: Occupation
-properties: [name, size, timestamp]
+properties: [name, timestamp]
 relationships: [EQUALS]
 meta: []
 --- !OType
 entity: Hobby
-properties: [name, size, timestamp]
+properties: [name, timestamp]
 relationships: [EQUALS, IN]
 meta: [Occupation]
 --- !OType
 entity: Job
-properties: [name, size, timestamp]
+properties: [name, timestamp]
 relationships: [EQUALS, IN]
 meta: [Occupation]
 --- !OType
 entity: Object
-properties: [name, size, timestamp]
+properties: [name, timestamp]
 relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
 meta: []
