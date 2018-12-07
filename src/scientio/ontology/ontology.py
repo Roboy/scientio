@@ -44,4 +44,4 @@ class Ontology(object):
         return None
 
     def __contains__(self, item: OType):
-        return item in self.types
+        return item in list(self.types)
