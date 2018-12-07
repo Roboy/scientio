@@ -1,6 +1,6 @@
 from typing import Type, List
 
-from src.scientio.drivers.neo4j_driver import Neo4j
+from src.scientio.drivers.neo4j_driver import Neo4jDriver
 from src.scientio.interfaces.operations import Operations
 from src.scientio.ontology.node import Node
 from src.scientio.ontology.ontology import Ontology
@@ -88,5 +88,5 @@ class Session(Operations):
     @staticmethod
     def _driver_for_name(driver_name: str) -> Type:
         return {
-            Session.Neo4jDriver: Neo4j
+            Session.Neo4jDriver: Neo4jDriver
         }[driver_name]
