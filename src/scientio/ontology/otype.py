@@ -25,3 +25,6 @@ class OType(yaml.YAMLObject):
             self.properties == other.properties and \
             self.relationships == other.relationships and \
             self.meta == other.meta
+
+    def __hash__(self):
+        return object.__hash__((self.entity, self.properties, self.relationships, self.meta))
