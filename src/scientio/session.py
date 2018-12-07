@@ -1,6 +1,6 @@
-from typing import Type
+from typing import Type, List
 
-from src.scientio.drivers.neo4j import Neo4j
+from src.scientio.drivers.neo4j_driver import Neo4j
 from src.scientio.interfaces.operations import Operations
 from src.scientio.ontology.node import Node
 from src.scientio.ontology.ontology import Ontology
@@ -54,7 +54,7 @@ class Session(Operations):
         """
         return self._driver.create(request)
 
-    def retrieve(self, request: Node, node_id: int = None) -> Node:
+    def retrieve(self, request: Node = None, node_id: int = None) -> List[Node]:
         """
         Retrieve a node, by match or by id.
         :param request: Set to a certain Node specification for retrieval-

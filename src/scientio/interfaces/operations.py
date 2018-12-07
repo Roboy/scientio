@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from src.scientio.ontology.node import Node
 
@@ -17,9 +18,10 @@ class Operations(ABC):
         return NotImplemented
 
     @abstractmethod
-    def retrieve(self, request: Node) -> Node:
+    def retrieve(self, request: Node = None, node_id: int = None) -> List[Node]:
         """
         Get node by ID
+        :param node_id:
         :param request:
         :return: NodeModel
         """
