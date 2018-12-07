@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 from enum import Enum
 from collections import defaultdict
-from typing import Union, Set, Dict, List, FrozenSet, Optional
+from typing import Dict, List, FrozenSet, Optional
 
 from src.scientio.ontology.json_node import JsonNode
 from src.scientio.ontology.otype import OType
@@ -48,7 +48,7 @@ class Node(object):
             self.otype = otype
             self.entity = otype.entity
             self.meta = otype.meta
-            self.properties = dict().fromkeys(otype.properties, None)
+            self.properties = dict().fromkeys(otype.properties, "")
             self.relationships = dict().fromkeys(otype.relationships, [])
         else:
             self.id = -1
@@ -123,6 +123,12 @@ class Node(object):
         Get the node OType.
         """
         self.otype = otype
+        self.meta = otype.meta
+        self.properties = dict().fromkeys(otype.properties, "")
+        self.relationships = dict().fromkeys(otype.relationships, [])
+
+    def set_entity(self, entity: str):
+        self.entity = entity
 
     def get_entity(self) -> str:
         return self.entity
@@ -236,7 +242,7 @@ class Node(object):
         Args:
             name: String with node name.
         """
-        self.set_properties(**{self.NAME_STR: name})
+        self.add_properties({self.NAME_STR: name})
 
     def check_relationship_availability(self, relationships):
         """
@@ -320,7 +326,7 @@ class Node(object):
         """
         return f'Node(id = {self.id}, ' \
                f'type = {self.otype}, ' \
-               f'entity = {self.entity}' \
+               f'entity = {self.entity}, ' \
                f'meta = {self.meta}, ' \
                f'properties = {self.properties}, ' \
                f'relationships = {self.relationships})'
