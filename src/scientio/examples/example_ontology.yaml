@@ -1,70 +1,91 @@
---- !OType
-entity: Person
+---
+!OType
+name: Person
 properties: [name, sex, full_name, birthdate, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
-meta: []
---- !OType
-entity: TelegramPerson
+
+---
+!OType
+name: TelegramPerson
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, STUDY_AT, OCCUPIED_AS, WORK_FOR, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF]
-meta: []
---- !OType
-entity: Robot
+
+---
+!OType
+name: Robot
 properties: [name, sex, full_name, birthdate, telegram_id, timestamp]
 relationships: [EQUALS, FROM, LIVE_IN, WORK_FOR, FRIEND_OF, SIBLING_OF]
-meta: []
---- !OType
-entity: Roboy
+
+---
+!OType
+name: Roboy
 properties: [name, sex, full_name, birthdate, facebook_id, telegram_id, slack_id, whatsapp_id, line_id, timestamp]
 relationships: [EQUALS, FROM, HAS_HOBBY, LIVE_IN, FRIEND_OF, MEMBER_OF, CHILD_OF, SIBLING_OF, KNOW]
 meta: [Roboy]
---- !OType
-entity: Organisation
+
+---
+!OType
+name: Organisation
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, SUBSIDIARY_OF, WORK_FOR, STUDY_AT]
-meta: []
---- !OType
-entity: Company
+
+---
+!OType
+name: Company
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, WORK_FOR]
 meta: [Organisation]
---- !OType
-entity: University
+
+---
+!OType
+name: University
 properties: [name, birthdate, timestamp]
 relationships: [EQUALS, FROM, STUDY_AT]
 meta: [Organisation]
---- !OType
-entity: Location
+
+---
+!OType
+name: Location
 properties: [name, size, timestamp]
 relationships: [EQUALS, FROM, IN, LIVE_IN, BORN_IN]
-meta: []
---- !OType
-entity: City
+
+---
+!OType
+name: City
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 meta: [Location]
---- !OType
-entity: Country
+
+---
+!OType
+name: Country
 properties: [name, size, timestamp]
 relationships: [EQUALS, IN, LIVE_IN, BORN_IN]
 meta: [Location]
---- !OType
-entity: Occupation
+
+---
+!OType
+name: Occupation
 properties: [name, timestamp]
 relationships: [EQUALS]
-meta: []
---- !OType
-entity: Hobby
+
+---
+!OType
+name: Hobby
 properties: [name, timestamp]
 relationships: [EQUALS, IN]
 meta: [Occupation]
---- !OType
-entity: Job
+
+---
+!OType
+name: Job
 properties: [name, timestamp]
 relationships: [EQUALS, IN]
 meta: [Occupation]
---- !OType
-entity: Object
+
+---
+!OType
+name: Object
 properties: [name, timestamp]
 relationships: [EQUALS, IN, PART_OF, KNOW, HEAR, SEE, TOUCH, GRASP, PLAY, TURN_ON]
 meta: []

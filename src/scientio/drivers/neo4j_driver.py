@@ -3,11 +3,11 @@ from typing import Optional, Dict, List, Set
 from neo4j import GraphDatabase
 from neo4j import Node as Neo4jNode
 
-from src.scientio.interfaces.operations import Operations
-from src.scientio.ontology.node import Node
-from src.scientio.ontology.ontology import Ontology
-from src.scientio.ontology.otype import OType
-from src.scientio.util.query_builder import QueryBuilder
+from scientio.interfaces.operations import Operations
+from scientio.ontology.node import Node
+from scientio.ontology.ontology import Ontology
+from scientio.ontology.otype import OType
+from scientio.util.query_builder import QueryBuilder
 
 
 class Neo4jDriver(Operations):

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import re
 import string
 from typing import Dict, List, Any
@@ -20,7 +18,7 @@ class QueryBuilder(object):
     """
     query: string = ''  # String storing a Cypher query
 
-    def __init__(self, query: string = None, builder: QueryBuilder = None):
+    def __init__(self, query: string = None, builder: 'QueryBuilder' = None):
         """
         Initialise a QueryBuilder object
         If query is None and builder is None, initialises an empty QueryBuilder.
@@ -43,7 +41,7 @@ class QueryBuilder(object):
         """
         return re.sub("\s\s+", " ", self.query.strip())
 
-    def append(self, chunks: List[str]) -> QueryBuilder:
+    def append(self, chunks: List[str]) -> 'QueryBuilder':
         """
         Attach several parts of the query together
         :param parts: list of strings
@@ -52,7 +50,7 @@ class QueryBuilder(object):
         self.query += "".join(chunks)
         return self
 
-    def add(self, chunk: str) -> QueryBuilder:
+    def add(self, chunk: str) -> 'QueryBuilder':
         """
         Add a single token/call into the Cypher query
         :param chunk: string containing a single part of the query
@@ -60,15 +58,15 @@ class QueryBuilder(object):
         """
         return self.append([" ", chunk, " "])
 
-    def add_meta(self, meta: frozenset) -> QueryBuilder:
+    def add_meta(self, meta: List[str]) -> 'QueryBuilder':
         """
         Add a single token/call into the Cypher query
         :param meta: frozenset containing meta of the node
         :return: this QueryBuilder
         """
-        return self.add(":" + ":".join(meta))
+        return self.add(":".join(meta))
 
-    def format(self, chunk: str, *args: List[Any]) -> QueryBuilder:
+    def format(self, chunk: str, *args: List[Any]) -> 'QueryBuilder':
         """
         Add arguments into the Cypher query string
         :param chunk: token/call defining the list of objects
@@ -77,19 +75,18 @@ class QueryBuilder(object):
         """
         return self.add(chunk.format(*args))
 
-    def add_parameters(self, properties: Dict[str, str]) -> QueryBuilder:
+    def add_parameters(self, properties: Dict[str, str]) -> 'QueryBuilder':
         """
         Add the node properties to the Cypher query
         :param properties: properties of the node
         :return: this QueryBuilder
         """
         param_list: [str] = []
-        print()
         for key, value in properties.items():
             param_list.append(f"{key}: '{value}'")
         return self.add(f"{{{', '.join(param_list)}}}")
 
-    def match_by_id(self, id: int, letter: str) -> QueryBuilder:
+    def match_by_id(self, id: int, letter: str) -> 'QueryBuilder':
         """
         Match the ID to the node variable in the Cypher query
         :param id: a number denoting the ID of the node in the DB
@@ -98,7 +95,7 @@ class QueryBuilder(object):
         """
         return self.add(f"MATCH ({letter}) WHERE ID({letter})={id}")
 
-    def set_values(self, properties: Dict[str, str], letter: str) -> QueryBuilder:
+    def set_values(self, properties: Dict[str, str], letter: str) -> 'QueryBuilder':
         """
         Create Cypher SET query to set the value to the node in the query
         :param properties: properties that have to be initialised
