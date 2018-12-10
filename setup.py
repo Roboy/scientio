@@ -16,7 +16,7 @@ packages = setuptools.find_packages("src")
 
 setuptools.setup(
     name="scientio",
-    version="1.0.0",
+    version="0.9.0",
     url="https://github.com/roboy/scientio",
     author="Roboy",
     author_email="team@roboy.org",
@@ -30,7 +30,7 @@ setuptools.setup(
 
     install_requires=required,
     dependency_links=required_url,
-    python_requires='>=3.6',
+    python_requires='>=3.7',
 
     classifiers=[
         "Programming Language :: Python :: 3",
