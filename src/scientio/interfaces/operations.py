@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.scientio.ontology.node import Node
+from scientio.ontology.node import Node
 
 
 class Operations(ABC):

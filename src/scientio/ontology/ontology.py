@@ -1,21 +1,20 @@
-from __future__ import annotations
 from typing import FrozenSet, Optional
 
 import copy
 import yaml
 
-from src.scientio.ontology.otype import OType
+from scientio.ontology.otype import OType
 
 
 class Ontology(object):
-    types: FrozenSet[OType] = None
+    types: FrozenSet[OType]
     entities: FrozenSet[str]
     properties: FrozenSet[str]
     relationships: FrozenSet[str]
 
-    def __init__(self, types_set: FrozenSet[OType] = None, ontology: Ontology = None, path_to_yaml: str = None):
+    def __init__(self, *, types_set: FrozenSet[OType] = None, ontology: 'Ontology' = None, path_to_yaml: str = None):
         if types_set is not None:
-            self.types = types_set
+            self.types = frozenset(*types_set)
         elif ontology is not None:
             self.types = copy.deepcopy(ontology.types)
         elif path_to_yaml is not None:
@@ -44,4 +43,4 @@ class Ontology(object):
         return None
 
     def __contains__(self, item: OType):
-        return item in list(self.types)
+        return item in self.types

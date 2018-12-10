@@ -1,9 +1,9 @@
 from typing import Type, List
 
-from src.scientio.drivers.neo4j_driver import Neo4jDriver
-from src.scientio.interfaces.operations import Operations
-from src.scientio.ontology.node import Node
-from src.scientio.ontology.ontology import Ontology
+from scientio.drivers.neo4j_driver import Neo4jDriver
+from scientio.interfaces.operations import Operations
+from scientio.ontology.node import Node
+from scientio.ontology.ontology import Ontology
 
 
 class Session(Operations):
@@ -46,9 +46,9 @@ class Session(Operations):
         """
         Create a new Node by a certain Node specification.
         Note: The node will only be persisted, if it is legal wrt/ it's properties/relationships,
-         given it's Concept from this Session's ontology.
+         given it's type from this Session's ontology.
         :param request: The node to persist. Note, that the
-         `request` Node must have a set Concept from this Session's ontology,
+         `request` Node must have a set type from this Session's ontology,
          and no ID assigned (yet).
         :return: The created Node if successful, None otherwise.
         """
@@ -68,11 +68,11 @@ class Session(Operations):
 
     def update(self, request: Node) -> Node:
         """
-        Persist changes to node properties/concept/relationships made on a Node
+        Persist changes to node properties/type/relationships made on a Node
          which was previosuly obtained through `retrieve()` or `create()`.
         Note: The node will only be persisted, if it is legal wrt/ it's properties/relationships,
-         given it's Concept from this Session's ontology.
-        :param request: The node whose changed properties/concept/relationships should be persisted.
+         given it's type from this Session's ontology.
+        :param request: The node whose changed properties/type/relationships should be persisted.
         :return: The persisted node, or None if the Operation failed.
         """
         return self._driver.update(request)
