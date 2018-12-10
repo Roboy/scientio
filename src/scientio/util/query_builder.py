@@ -64,7 +64,7 @@ class QueryBuilder(object):
         :param meta: frozenset containing meta of the node
         :return: this QueryBuilder
         """
-        return self.add(":".join(meta))
+        return self.add(":"+":".join(meta))
 
     def format(self, chunk: str, *args: List[Any]) -> 'QueryBuilder':
         """

@@ -153,7 +153,7 @@ class Node(object):
         Add properties to the existing properties of a node.
         :param values: One or multiple dictonary entries to add.
         """
-        self.properties.update({key: value for key, value in values.items() if key in self.properties.keys()})
+        self.properties.update({key: value for key, value in values.items() if key in self.properties})
 
     def get_relationships(self, key: str=None) -> Union[Set[int], Dict[str, Set[int]]]:
         """
@@ -178,13 +178,12 @@ class Node(object):
             if key in self.relationships:
                 self.relationships[key] |= val if isinstance(val, set) else {val}
 
-    def set_relationships(self, values: Dict[str, List[int]]):
+    def set_relationships(self, values: Dict[str, Set[int]]):
         """
         Replace relationships of of a node.
         :param values: Dictionary from relationship names to
           key sets, which should replace the existing entries
           for the respective relationship.
-        :return:
         """
         for key, val in values.items():
             if key in self.relationships:

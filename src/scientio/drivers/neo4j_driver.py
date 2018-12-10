@@ -40,7 +40,7 @@ class Neo4jDriver(Operations):
 
     def retrieve(self, request: Node = None, node_id: int = None) -> Optional[List[Node]]:
         if node_id is not None and node_id >= 0:
-            return self.get_node_by_id(request.get_id())
+            return self.get_node_by_id(node_id)
         else:
             if request is not None and self._ontology.__contains__(request.get_type()):  # The class of Node is in ontology
                 return self.get_node(request)
@@ -81,7 +81,7 @@ class Neo4jDriver(Operations):
         builder.add_parameters(req.get_properties()).add(") RETURN a")
 
         record: Neo4jNode = self._exec_query(builder.get())[0]
-        req.set_id(int(record._id))
+        req.set_id(int(record.id))
         return req
 
     def get_node(self, req: Node) -> Optional[List[Node]]:
@@ -112,7 +112,8 @@ class Neo4jDriver(Operations):
         result_nodes: List[Node] = []  # nodes from result
         if len(records) > 0:
             for record in records:
-                result_nodes.append(self.get_node_by_id(int(record))[0])
+                result_node = self.get_node_by_id(int(record))
+                result_nodes.append(result_node[0])
 
         return result_nodes
 
@@ -137,10 +138,10 @@ class Neo4jDriver(Operations):
         builder.add(f"MATCH (n)-[r]-(m) WHERE ID(n)={node_id} RETURN TYPE(r) as name, COLLECT(ID(m)) as ids")
         records = self._exec_query(builder.get(), single=False)
 
-        relationships = dict().fromkeys(node_type.relationships, [])
+        relationships = {rel: set() for rel in node_type.relationships}
         if records is not None and len(records) > 0:
             for record in records:
-                relationships.update({record.get('name'): record.get('ids')})
+                relationships.update({record.get('name'): set(record.get('ids'))})
 
         result_node = self.compose_node(node_type, node_id, properties, relationships)
         return [result_node]
@@ -170,11 +171,11 @@ class Neo4jDriver(Operations):
                 builder.match_by_id(req.get_id(), "n")
 
                 counter: int = 0
-                for _, value in relationships:
-                    builder.add(f"MATCH (m{counter}) WHERE ID(m{counter}) IN {value} ")
+                for _, value in relationships.items():
+                    builder.add(f"MATCH (m{counter}) WHERE ID(m{counter}) IN [{','.join((str(rel) for rel in value))}] ")
                     counter += 1
                 counter = 0
-                for key, _ in relationships:
+                for key, _ in relationships.items():
                     builder.add(f"MERGE (n)-[r{counter}:{key}]-(m{counter})")
                     counter += 1
                 builder.add("RETURN n")
@@ -228,14 +229,13 @@ class Neo4jDriver(Operations):
     def delete_node(self, node_id: int) -> bool:
         query = ""  # builder from MNM
         self._exec_query(query)
-
         if self.get_node_by_id(node_id) is None:
             return True
         else:
             return False
 
-    def compose_node(self, otype: OType, node_id: int, properties: Dict[str, str], relationships: Dict[str, List[int]]):
-        new_node: Node = Node(otype=otype)
+    def compose_node(self, otype: OType, node_id: int, properties: Dict[str, str], relationships: Dict[str, Set[int]]):
+        new_node: Node = Node(metatype=otype)
         new_node.set_id(node_id)
         new_node.set_properties(properties)
         new_node.set_relationships(relationships)
