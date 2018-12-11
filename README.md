@@ -134,7 +134,7 @@ kirk = sess.retrieve(request=kirk)[0]
 spock = sess.retrieve(request=spock)[0]
 
 # Add a relationship between Kirk and Spock
-kirk.add_relationship({"captain_of": {spock.get_id()}})
+kirk.add_relationships({"captain_of": {spock.get_id()}})
 
 # Make sure that the new relationship is persisted
 sess.update(kirk)
