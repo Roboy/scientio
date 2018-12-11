@@ -88,14 +88,15 @@ sess = Session(
 human_type = onto.get_type("Human")
 vulcan_type = onto.get_type("Vulcan")
 
-# Create query templates to get the actual kirk/spocks
+# Create a transient human named "Kirk"
 kirk = Node(metatype=human_type)
 kirk.set_name("Kirk")
 
-# Add a relationship between Kirk and Spock
+# Create a transient vulcan named "Spock"
 spock = Node(metatype=vulcan_type)
 spock.set_name("Spock")
 
+# Persist kirk and spock
 sess.create(kirk)
 sess.create(spock)
 ```
@@ -128,7 +129,7 @@ spock = Node(metatype=vulcan_type)
 # Query Kirk and Spock from the database, using
 # the query nodes we created previously. We're just
 # gonna assume that the first human is Kirk, and the first
-# Vulcan is Spock.
+# vulcan is Spock.
 kirk = sess.retrieve(request=kirk)[0]
 spock = sess.retrieve(request=spock)[0]
 
