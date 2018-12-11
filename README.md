@@ -57,7 +57,7 @@ properties:      # Allowed properties for every Vulcan
  - name
  - homeworld
  - ear_pointiness
-----
+---
 !OType
 entity: Human    # Declare a more specific Alien type
 meta: [Alien]
