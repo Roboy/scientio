@@ -49,7 +49,7 @@ The ontology description is a collection of named entity types, where each type 
 
 !OType
 entity: Alien    # The name of the ontology type
-----
+---
 !OType
 entity: Vulcan   # Declare a more specific Alien type
 meta: [Alien]
