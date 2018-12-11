@@ -16,7 +16,7 @@ packages = setuptools.find_packages("src")
 
 setuptools.setup(
     name="scientio",
-    version="0.9.pre",
+    version="0.9.0",
     url="https://github.com/roboy/scientio",
     author="Roboy",
     author_email="team@roboy.org",
