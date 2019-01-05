@@ -62,9 +62,9 @@ class Session(Operations):
          which retrieved nodes are required to match.
         :param node_id: A node id for retrieval-by-id. Set this to any integer
          to retrieve the Node with the specified integer id.
-        :return: A Node which matches the criteria, None if no such Node exists.
+        :return: A list of nodes which match the criteria, None if no such Node exists.
         """
-        return self._driver.retrieve(request)
+        return self._driver.retrieve(request, node_id)
 
     def update(self, request: Node) -> Node:
         """
