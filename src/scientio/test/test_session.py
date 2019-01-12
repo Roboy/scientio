@@ -11,7 +11,7 @@ class Test(unittest.TestCase):
         Should be executed by Travis after setting up neo4j in docker.
         """
 
-        # Default values are neo4j defaults.
+        # Default values are neo4j defaults, EXCEPT the password.
         address = os.environ.get('NEO4J_ADDRESS', 'bolt://localhost:7687')
         user = os.environ.get('NEO4J_USERNAME', 'neo4j')
         passw = os.environ.get('NEO4J_PASSWORD', 'neo42j')
