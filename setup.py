@@ -30,7 +30,7 @@ setuptools.setup(
 
     install_requires=required,
     dependency_links=required_url,
-    python_requires='>=3.7',
+    python_requires='>=3.6',
 
     classifiers=[
         "Programming Language :: Python :: 3",
