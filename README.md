@@ -6,6 +6,8 @@ Roboy ScientIO (from Lat. scientia - knowledge and Input/Output) - a Knowledge G
 
 ## Dependencies
 
+__ScientIO requires at least Python 3.7, since it makes excessive use of [PEP 560](https://docs.python.org/3/whatsnew/3.7.html#whatsnew37-pep560) (core support for typing module and generic types).__
+
 To use ScientIO, you will need to have one of it's supported back-ends installed. Currently, the only supported back-end is Neo4j, which may be run in a number of ways
 (if you don't have a remote instance available). We recommend simply running it through docker - like this:
 
@@ -14,7 +16,7 @@ docker run \
     --publish=7474:7474 --publish=7687:7687 \
     --volume=$HOME/neo4j/data:/data \
     --volume=$HOME/neo4j/logs:/logs \
-    neo4j:3.0
+    neo4j:3.5
 ```
 
 ## Installation
