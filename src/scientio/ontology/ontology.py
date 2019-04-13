@@ -2,6 +2,7 @@ from typing import FrozenSet, Optional
 
 import copy
 import yaml
+from yaml import FullLoader
 
 from scientio.ontology.otype import OType
 
@@ -30,7 +31,7 @@ class Ontology(object):
     def from_yaml_file(self, path: str) -> Optional[FrozenSet[OType]]:
         try:
             with open(path, 'r') as f:
-                ontology_data = list(yaml.load_all(f))
+                ontology_data = list(yaml.load_all(f, Loader=FullLoader))
                 return frozenset(ontology_data)
         except yaml.YAMLError as e:
             print("Error in ontology file: ", e)
