@@ -1,0 +1,28 @@
+language: python
+
+matrix:
+  include:
+  - python: 3.7
+    dist: xenial
+    sudo: true
+
+cache: pip
+
+env:
+- NEO4J_ADDRESS="bolt://localhost:7687" NEO4J_USERNAME="neo4j" NEO4J_PASSWORD="neo42j" NEO4J_URL="bolt://localhost:7687"
+
+jdk:
+- openjdk11
+
+before_install:
+- wget dist.neo4j.org/neo4j-community-3.5.0-unix.tar.gz
+- tar -xzf neo4j-community-3.5.0-unix.tar.gz
+- echo "dbms.connector.bolt.address=0.0.0.0:7687" >> neo4j-community-3.5.0/conf/neo4j.conf
+- sudo neo4j-community-3.5.0/bin/neo4j-admin set-initial-password neo42j
+- sudo neo4j-community-3.5.0/bin/neo4j start
+
+install:
+- pip install -r requirements.txt
+
+script:
+- ./run_tests.sh
