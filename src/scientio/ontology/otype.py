@@ -1,6 +1,7 @@
 from typing import FrozenSet, Set, List, Union
 
 import yaml
+from yaml import FullLoader
 
 
 class OType:
@@ -36,4 +37,4 @@ class OType:
         return OType(**fields)
 
 
-yaml.add_constructor(OType.yaml_tag, OType._yaml_ctor)
+yaml.add_constructor(OType.yaml_tag, OType._yaml_ctor, Loader=FullLoader)

@@ -117,7 +117,7 @@ class Node(object):
         self.meta = otype.meta
         self.entity = otype.entity
         self.properties = dict().fromkeys(otype.properties, "")
-        self.relationships = {rel: {} for rel in otype.relationships}
+        self.relationships = {rel: set() for rel in otype.relationships}
 
     def set_entity(self, entity: str):
         self.entity = entity
