@@ -1,4 +1,6 @@
 pytz
 neo4j
+pyorient
+redisgraph-py
 pyyaml
 reggol
