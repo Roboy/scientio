@@ -3,8 +3,8 @@ from enum import Enum
 from collections import defaultdict
 from typing import Dict, List, FrozenSet, Optional, Union, Any, Set
 
-from scientio.ontology.json_node import JsonNode
-from scientio.ontology.otype import OType
+from ..ontology.json_node import JsonNode
+from ..ontology.otype import OType
 
 
 class RelationshipAvailability(Enum):

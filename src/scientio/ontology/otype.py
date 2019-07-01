@@ -32,7 +32,7 @@ class OType:
         return self.entity.__hash__()
 
     @staticmethod
-    def _yaml_ctor(loader, node):
+    def _yaml_ctor(loader, node) -> 'OType':
         fields = loader.construct_mapping(node, deep=True)
         return OType(**fields)
 

@@ -4,7 +4,7 @@ import copy
 import yaml
 from yaml import FullLoader
 
-from scientio.ontology.otype import OType
+from ..ontology.otype import OType
 
 
 class Ontology(object):

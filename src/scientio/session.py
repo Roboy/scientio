@@ -1,9 +1,9 @@
 from typing import Type, List
 
-from scientio.drivers.neo4j_driver import Neo4jDriver
-from scientio.interfaces.operations import Operations
-from scientio.ontology.node import Node
-from scientio.ontology.ontology import Ontology
+from .drivers.neo4j_driver import Neo4jDriver
+from .interfaces.operations import Operations
+from .ontology.node import Node
+from .ontology.ontology import Ontology
 
 
 class Session(Operations):
